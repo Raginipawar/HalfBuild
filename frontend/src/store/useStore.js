@@ -50,8 +50,10 @@ export const useStore = create(
         },
 
         async login({ email, password }) {
-          const user = get().users.find((u) => u.email === email.trim().toLowerCase())
-          if (!user) return { ok: false, error: 'We could not find a city for that email.' }
+          // accept an email or a username, with or without the @
+          const key = email.trim().toLowerCase().replace(/^@/, '')
+          const user = get().users.find((u) => u.email === key || u.username === key)
+          if (!user) return { ok: false, error: 'No city with that email or username in this browser. Accounts live in the browser you signed up on, so sign up here once or use the demo account.' }
           if (user.passwordHash !== (await sha256(password))) return { ok: false, error: 'That password does not match. Try again.' }
           set({ currentUserId: user.id })
           return { ok: true }

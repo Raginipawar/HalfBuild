@@ -122,8 +122,8 @@ export function Login() {
   return (
     <AuthShell title="Welcome back." sub="Your city kept the lights on where it could.">
       <form onSubmit={(e) => e.preventDefault()} className="space-y-4" noValidate>
-        <Field label="Email" htmlFor="email">
-          <input id="email" type="email" autoComplete="email" required className="field" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+        <Field label="Email or username" htmlFor="email">
+          <input id="email" type="text" autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} required className="field" value={form.email} onChange={(e) => { setForm({ ...form, email: e.target.value }); setError('') }} />
         </Field>
         <Field label="Password" htmlFor="password" error={error}>
           <input id="password" type="password" autoComplete="current-password" required className="field" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
