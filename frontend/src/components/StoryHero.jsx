@@ -10,9 +10,9 @@ import City from '../iso/City'
 // 3. A few get revived: cranes appear and their lights come back.
 
 const CHAPTERS = [
-  { title: 'Every builder has a folder of unfinished projects.', sub: 'Each one becomes a building. Finished parts are solid floors, unfinished parts are scaffolding.' },
-  { title: 'Then life happened.', sub: 'Months pass. Projects nobody touches slowly go dark. Only the ones being revived keep their lights on.' },
-  { title: 'Every unfinished project deserves another floor.', sub: 'Inspect each one, pick a path, and bring the right ones back.', final: true },
+  { title: 'Your projects rise.', sub: 'Finished parts are floors. Unfinished parts are scaffolding.' },
+  { title: 'Life happens.', sub: 'Untouched projects slowly go dark.' },
+  { title: 'Bring them back.', sub: 'Pick the right ones. Cranes up, lights on.', final: true },
 ]
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
@@ -51,11 +51,11 @@ export default function StoryHero() {
 
   return (
     <section ref={ref} id="story" className={reduce ? 'relative py-16' : 'relative h-[300vh]'} aria-label="The HALFBUILT city story">
-      <div className={`${reduce ? '' : 'sticky top-16'} mx-auto flex h-[calc(100vh-4rem)] min-h-[600px] max-w-7xl flex-col gap-5 px-4 py-6 sm:px-8`}>
-        <div className="text-center">
-          <p className="eyebrow">Chapter {idx + 1} of 3 · The city story</p>
+      <div className={`${reduce ? '' : 'sticky top-16'} mx-auto grid h-[calc(100vh-4rem)] min-h-[560px] max-w-7xl items-center gap-6 px-4 py-6 sm:px-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.2fr)]`}>
+        <div className="text-left">
+          <p className="eyebrow">The city story · {idx + 1} of 3</p>
             {/* progress through the three chapters */}
-          <div className="mx-auto mt-3 flex w-40 gap-1.5" aria-hidden>
+          <div className="mt-3 flex w-40 gap-1.5" aria-hidden>
             {[0, 1, 2].map((i) => (
               <div key={i} className={`h-1 flex-1 overflow-hidden rounded-full bg-ink/15`}>
                 <div className="h-full bg-light" style={{ width: `${clamp(p * 3 - i) * 100}%` }} />
@@ -70,21 +70,21 @@ export default function StoryHero() {
               exit={{ opacity: 0, y: -20, filter: 'blur(6px)' }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h2 className="title mx-auto mt-3 max-w-4xl">{chapter.title}</h2>
-              <p className="lead mx-auto mt-3 max-w-2xl">{chapter.sub}</p>
+              <h2 className="title mt-4">{chapter.title}</h2>
+              <p className="lead mt-3 max-w-xs">{chapter.sub}</p>
               {chapter.final && (
-                <div className="mt-5 flex flex-wrap justify-center gap-3">
+                <div className="mt-6 flex flex-wrap gap-3">
                   <Link to={user ? '/city' : '/signup'} className="btn btn-primary">Build my city <ArrowRight size={16} /></Link>
-                  <a href="#demo-city" className="btn btn-ghost">Explore the demo city below</a>
+                  <Link to="/city-tour" className="btn btn-ghost">City tour</Link>
                 </div>
               )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div data-city="day" className="city-sketch relative min-h-0 flex-1">
-          <div className="flex h-full items-center justify-center p-2 sm:p-6">
-            <div className="flex h-full w-full max-w-4xl items-center [&_svg]:max-h-[calc(100vh-22rem)]">
+        <div data-city="day" className="city-sketch relative flex h-full min-h-0 items-center">
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="flex h-full w-full items-center [&_svg]:max-h-[calc(100vh-7rem)]">
               <div className="w-full"><City projects={projects} users={users} interactive={false} /></div>
             </div>
           </div>

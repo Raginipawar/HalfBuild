@@ -11,6 +11,7 @@ import { useStore, useCurrentUser } from '../store/useStore'
 import { CONFIG, inspect } from '../logic/revivalScore'
 import { rankBuilders } from '../logic/leaderboard'
 import MeadowHero from '../components/MeadowHero'
+import StoryHero from '../components/StoryHero'
 
 const recent = new Date().toISOString()
 const SAMPLE_PAUSED = { name: 'Paused', completedParts: ['a', 'b', 'c'], pendingParts: ['d', 'e'], status: 'paused', reason: 'time', lastTouchedOn: '2026-03-01T00:00:00Z' }
@@ -22,6 +23,7 @@ export default function Landing() {
       <MeadowHero />
       <ProblemStrip />
       <HowItWorks />
+      <StoryHero />
       <Features />
       <ScoreDemo />
       <CommunityPreview />

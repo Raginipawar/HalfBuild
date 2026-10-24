@@ -18,7 +18,7 @@ export default function MenuOverlay({ open, onClose }) {
     { to: '/', label: 'Home', hint: 'The story and a live demo city' },
     { to: '/about', label: 'About', hint: 'Why a city, and what we believe' },
     { to: '/how-it-works', label: 'How it works', hint: 'From paused project to first step' },
-    { to: '/city-tour', label: 'City tour', hint: 'The story, then a whole city to explore' },
+    { to: '/city-tour', label: 'City tour', hint: 'Six builders. One city. Find yourself in it.' },
     { to: '/leaderboard', label: 'Leaderboard', hint: 'Ranked by projects revived' },
     { to: '/square', label: "Builders' Square", hint: 'Find people to finish with' },
     { to: '/city', label: 'My City', hint: 'Your projects as buildings' },

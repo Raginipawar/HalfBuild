@@ -3,15 +3,13 @@ import { Link } from 'react-router-dom'
 import { Pause, Play, Search } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import City from '../iso/City'
-import StoryHero from '../components/StoryHero'
 import { Avatar, Reveal } from '../components/ui'
 import { litRatio } from '../logic/buildingState'
 
-// City tour: the scroll story first, then the whole demo city to explore.
+// City tour: the whole demo city to explore, Git City style.
 export default function CityTour() {
   return (
     <main>
-      <StoryHero />
       <DemoCity />
     </main>
   )
