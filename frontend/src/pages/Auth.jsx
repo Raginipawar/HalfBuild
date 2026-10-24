@@ -1,21 +1,14 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { ChipsInput, Field } from '../components/ui'
 import { PixelSquares } from '../components/Decor'
-import BuildingView from '../iso/BuildingView'
+// the 3D lanyard pulls in three.js, so it only loads on these two pages
+const Lanyard = lazy(() => import('../components/Lanyard/Lanyard'))
 
 // Sign up and Log in share one layout: form on the left, a building on the right.
 // DEMO AUTHENTICATION ONLY: everything stays in this browser.
 
-const SAMPLE = {
-  name: 'Your first building',
-  completedParts: ['Idea', 'Sketch', 'First screen'],
-  pendingParts: ['The rest'],
-  status: 'reviving',
-  reason: 'time',
-  lastTouchedOn: new Date().toISOString(),
-}
 
 function AuthShell({ title, sub, children }) {
   return (
@@ -26,10 +19,21 @@ function AuthShell({ title, sub, children }) {
         <p className="lead mt-3">{sub}</p>
         <div className="mt-8">{children}</div>
       </div>
-      <div className="panel relative hidden items-center justify-center overflow-hidden p-10 lg:flex" data-city="night">
-        <BuildingView project={SAMPLE} showSign={false} className="h-[420px]" />
-        <p className="absolute bottom-8 left-10 right-10 text-sm text-white/60">
-          Unfinished does not mean failed. It means the next floor has not been built yet.
+      <div className="panel relative hidden min-h-[620px] overflow-hidden lg:block">
+        <Suspense fallback={null}>
+          <Lanyard
+            frontImage="/lanyard/card-front.svg"
+            backImage="/lanyard/card-back.svg"
+            strapImage="/lanyard/strap.svg"
+            cardColor="#1f1e1f"
+            finish="glossy"
+            metal="graphite"
+            size={0.62}
+            strapLength={0.42}
+          />
+        </Suspense>
+        <p className="pointer-events-none absolute bottom-6 left-8 right-8 text-sm text-white/55">
+          Your builder pass. Drag it, throw it, click to flip it.
         </p>
       </div>
     </main>

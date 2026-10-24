@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="900" viewBox="0 0 640 900">
+  <rect width="640" height="900" fill="#f7f3ea"/>
+  <text x="320" y="150" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="600" letter-spacing="8" fill="#6f6f6b">ACCESS TO</text>
+  <text x="320" y="215" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="56" font-weight="700" fill="#1f1e1f">Your city</text>
+  <g transform="translate(140 300)" stroke="#262421" stroke-width="3">
+    <rect x="0" y="180" width="100" height="160" fill="#ece5d6"/>
+    <rect x="120" y="80" width="120" height="260" fill="#ece5d6"/>
+    <rect x="120" y="10" width="120" height="64" fill="none" stroke="#5f5a52" stroke-dasharray="10 8"/>
+    <g fill="#F5B942" stroke-width="2"><rect x="20" y="210" width="22" height="20"/><rect x="140" y="110" width="26" height="20"/><rect x="194" y="160" width="26" height="20"/><rect x="58" y="270" width="22" height="20"/></g>
+    <g fill="#cfc7b4" stroke-width="2"><rect x="194" y="110" width="26" height="20"/><rect x="140" y="210" width="26" height="20"/></g>
+    <path d="M-60 340 h480" stroke="#7a9a58" stroke-width="10"/>
+  </g>
+  <text x="320" y="760" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6f6f6b">Click the card to flip it.</text>
+  <text x="320" y="800" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="22" fill="#6f6f6b">Drag it, throw it, it always comes back.</text>
+</svg>
