@@ -10,7 +10,7 @@
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-coming_at_18:00-E9E3FF?style=for-the-badge&labelColor=1B1B2F)](#11--quick-start)
+[![Live Demo](https://img.shields.io/badge/LIVE_DEMO-open_HALFBUILT-F5B942?style=for-the-badge&labelColor=1B1B2F)](https://frontend-rho-seven-6if8yg51o1.vercel.app)
 [![Deck](https://img.shields.io/badge/ROUND_1_DECK-PDF-FDE2EF?style=for-the-badge&labelColor=1B1B2F)](Problem_approach/HALFBUILT_Round1_Deck.pdf)
 
 <br/>
@@ -310,7 +310,7 @@ Live build: **24 October 2026, 12:00 to 23:59 IST.**
 | 17:00 | 5 · Auth, My City, Add project, Project detail, Site Inspection | ✅ |
 | 18:00 | 6 · Leaderboard, Builders' Square, public profiles, **Surprise Challenge: Canvas Protocol** | ✅ |
 | 21:00 | 7 · Polish: watercolour theme, city story, City tour, glass header, lanyard pass | ✅ |
-| 23:00 | 8 · Ship | |
+| 23:00 | 8 · Ship: deployed on Vercel, phone layout checked | ✅ |
 
 ---|---|:-:|
 | 12:00 | 1 · Setup: Vite, Tailwind, Router, Zustand, tokens, Navbar, menu, Hello intro, seed data, isometric hero city | ✅ |
@@ -320,7 +320,7 @@ Live build: **24 October 2026, 12:00 to 23:59 IST.**
 | 17:00 | 5 · Auth, landing, **first deploy** | |
 | 18:00 | 6 · **Surprise Challenge**, activity grid, leaderboard, Builders' Square | |
 | 21:00 | 7 · Polish: intro, motion, responsive, accessibility | |
-| 23:00 | 8 · Ship | |
+| 23:00 | 8 · Ship: deployed on Vercel, phone layout checked | ✅ |
 
 ---
 
@@ -353,6 +353,8 @@ npm install
 npm run dev        # http://localhost:5173
 npm run build      # production build
 ```
+
+**Live:** https://frontend-rho-seven-6if8yg51o1.vercel.app
 
 Deploying on Vercel: import the repo and set **Root Directory** to `frontend`.
 
