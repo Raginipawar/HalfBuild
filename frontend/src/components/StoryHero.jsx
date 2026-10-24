@@ -47,7 +47,6 @@ export default function StoryHero() {
       lastTouchedOn: revived || dark === 0 ? now : x.lastTouchedOn,
     }
   })
-  const night = dark > 0.5 && revive < 0.6
   const chapter = CHAPTERS[idx]
 
   return (
@@ -55,6 +54,14 @@ export default function StoryHero() {
       <div className={`${reduce ? '' : 'sticky top-16'} mx-auto flex h-[calc(100vh-4rem)] min-h-[600px] max-w-7xl flex-col gap-5 px-4 py-6 sm:px-8`}>
         <div className="text-center">
           <p className="eyebrow">Chapter {idx + 1} of 3 · The city story</p>
+            {/* progress through the three chapters */}
+          <div className="mx-auto mt-3 flex w-40 gap-1.5" aria-hidden>
+            {[0, 1, 2].map((i) => (
+              <div key={i} className={`h-1 flex-1 overflow-hidden rounded-full bg-ink/15`}>
+                <div className="h-full bg-light" style={{ width: `${clamp(p * 3 - i) * 100}%` }} />
+              </div>
+            ))}
+          </div>
           <AnimatePresence mode="wait">
             <motion.div
               key={idx}
@@ -75,23 +82,11 @@ export default function StoryHero() {
           </AnimatePresence>
         </div>
 
-        <div
-          data-city={night ? 'night' : 'day'}
-          className="relative min-h-0 flex-1 overflow-hidden rounded-[1.75rem] border border-ink transition-colors duration-700"
-          style={{ background: 'linear-gradient(180deg, var(--sky-top), var(--sky-bottom))' }}
-        >
+        <div data-city="day" className="city-sketch relative min-h-0 flex-1">
           <div className="flex h-full items-center justify-center p-2 sm:p-6">
             <div className="flex h-full w-full max-w-4xl items-center [&_svg]:max-h-[calc(100vh-22rem)]">
               <div className="w-full"><City projects={projects} users={users} interactive={false} /></div>
             </div>
-          </div>
-          {/* progress through the three chapters */}
-          <div className="absolute inset-x-6 bottom-4 flex gap-2" aria-hidden>
-            {[0, 1, 2].map((i) => (
-              <div key={i} className={`h-1 flex-1 overflow-hidden rounded-full ${night ? 'bg-white/20' : 'bg-ink/15'}`}>
-                <div className="h-full bg-light" style={{ width: `${clamp(p * 3 - i) * 100}%` }} />
-              </div>
-            ))}
           </div>
         </div>
       </div>

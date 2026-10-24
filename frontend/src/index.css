@@ -309,6 +309,41 @@ body {
   }
 }
 
+/* storybook city: matches the meadow illustration (ink lines, cream keys, green grass) */
+.city-sketch {
+  --window-on: #f5b942;
+  --window-off: #cfc7b4;
+  --face-t: #f7f3ea;
+  --face-l: #ece5d6;
+  --face-r: #d9cfba;
+  --stone-t: #eef0e4;
+  --stone-l: #dfe3cf;
+  --stone-r: #c9cfb4;
+  --edge: rgba(38, 36, 33, 0.85);
+  --scaffold: #5f5a52;
+  --crane: #2a2724;
+  --flag: #e0573c;
+  --plaque: #c9b48a;
+  --slab-top: #b9cf8f;
+  --slab-l: #8fae66;
+  --slab-r: #7a9a58;
+  --road: #ebe3cf;
+  --curb: #d8cdb3;
+  --lane: #ffffff;
+  --grass: #a6c37a;
+  --tree: #8fb36a;
+  --tree-hi: #b7d18f;
+  --trunk: #6b5a48;
+  --lamp: #f5b942;
+  --glow-alpha: 0.35;
+  --car-a: #e0573c;
+  --car-b: #6f8fb3;
+  --shade: rgba(60, 80, 40, 0.18);
+}
+.city-sketch polygon[stroke="var(--edge)"] {
+  stroke-width: 1.1px;
+}
+
 /* feature card icons */
 .fx-bar, .fx-pulse {
   transform-box: fill-box;
