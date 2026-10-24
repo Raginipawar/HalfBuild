@@ -11,6 +11,11 @@ export default function IsoBuilding({
 }) {
   const reduce = useReducedMotion()
   const look = STATUS[status] ?? STATUS.paused
+  // a project with no parts listed yet still gets a ground floor, so it never looks missing
+  if (solid + pending === 0) {
+    solid = 1
+    pending = look.scaffold ? 1 : 0
+  }
   const tone = look.stone ? 'stone' : 'face'
   const top = solid * FLOOR
   const scaffoldTop = top + (look.scaffold ? pending : 0) * FLOOR
