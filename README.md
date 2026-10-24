@@ -6,7 +6,7 @@
 
 <br/>
 
-**A living city of your unfinished projects, and a calm way to decide which ones to bring back.**
+**A living city of your unfinished projects, and a calm way to decide which ones to bring backk.**
 
 <br/>
 
