@@ -309,6 +309,48 @@ body {
   }
 }
 
+/* feature card icons */
+.fx-bar, .fx-pulse {
+  transform-box: fill-box;
+}
+.fx-bar {
+  transform-origin: 50% 100%;
+  animation: fx-bar 2.4s ease-in-out infinite;
+}
+@keyframes fx-bar {
+  0%, 100% { transform: scaleY(0.55); }
+  50% { transform: scaleY(1); }
+}
+.fx-scan {
+  animation: fx-scan 2.4s ease-in-out infinite;
+}
+@keyframes fx-scan {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
+.fx-ring {
+  animation: fx-ring 2.8s ease-in-out infinite;
+}
+@keyframes fx-ring {
+  0%, 100% { stroke-dashoffset: 80; }
+  50% { stroke-dashoffset: 28; }
+}
+.fx-pulse {
+  transform-origin: center;
+  animation: fx-pulse 2s ease-in-out infinite;
+}
+@keyframes fx-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+.fx-blink {
+  animation: fx-blink 2.2s ease-in-out infinite;
+}
+@keyframes fx-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
 /* frosted glass header */
 .glass-bar {
   background: color-mix(in srgb, var(--color-paper) 38%, transparent);

@@ -94,23 +94,23 @@ function HowItWorks() {
   )
 }
 
-// tiny looping illustrations for the feature cards
+// tiny looping illustrations for the feature cards (plain CSS animations, see index.css)
 function Icon({ kind }) {
-  const reduce = useReducedMotion()
-  const loop = (props) => (reduce ? {} : { ...props, transition: { duration: 2.4, repeat: Infinity, ease: 'easeInOut', ...props.transition } })
   const s = { stroke: 'var(--color-ink)', strokeWidth: 1.5, fill: 'none' }
+  const d = (i) => ({ animationDelay: `${i * 0.25}s` })
   return (
-    <svg viewBox="0 0 64 48" className="h-12 w-16" aria-hidden>
-      {kind === 'city' && [8, 22, 36, 50].map((x, i) => (
-        <motion.rect key={x} x={x} width="10" rx="1" fill="var(--color-ink)" {...loop({ animate: { height: [14 + i * 5, 22 + i * 4, 14 + i * 5], y: [34 - i * 5, 26 - i * 4, 34 - i * 5] }, transition: { delay: i * 0.2 } })} y={34 - i * 5} height={14 + i * 5} />
+    <svg viewBox="0 0 64 48" className="h-12 w-16 overflow-visible" aria-hidden>
+      {kind === 'city' && [10, 16, 22, 28].map((h, i) => (
+        <rect key={i} className="fx-bar" style={d(i)} x={6 + i * 14} y={44 - h} width="10" height={h} rx="1" fill="var(--color-ink)" />
       ))}
-      {kind === 'inspect' && (<><rect x="18" y="6" width="28" height="38" {...s} /><motion.line x1="12" x2="52" stroke="var(--color-light)" strokeWidth="2.5" {...loop({ animate: { y1: [40, 10, 40], y2: [40, 10, 40] } })} y1="40" y2="40" /></>)}
-      {kind === 'score' && (<><circle cx="32" cy="24" r="16" stroke="var(--color-grey)" strokeWidth="5" fill="none" /><motion.circle cx="32" cy="24" r="16" stroke="var(--color-ink)" strokeWidth="5" fill="none" strokeLinecap="round" strokeDasharray="100.5" transform="rotate(-90 32 24)" {...loop({ animate: { strokeDashoffset: [80, 28, 80] } })} strokeDashoffset="28" /></>)}
-      {kind === 'timeline' && (<><line x1="14" y1="6" x2="14" y2="44" {...s} />{[10, 24, 38].map((y, i) => (<g key={y}><motion.circle cx="14" cy={y} r="4" fill={i === 0 ? 'var(--color-light)' : 'var(--color-ink)'} {...loop({ animate: { scale: [1, 1.3, 1] }, transition: { delay: i * 0.3 } })} /><rect x="24" y={y - 2} width={30 - i * 6} height="4" rx="2" fill="var(--color-grey)" /></g>))}</>)}
+      {kind === 'city' && <line x1="2" y1="44.5" x2="62" y2="44.5" {...s} />}
+      {kind === 'inspect' && (<><rect x="18" y="6" width="28" height="38" {...s} /><line className="fx-scan" x1="12" x2="52" y1="40" y2="40" stroke="var(--color-light)" strokeWidth="2.5" /></>)}
+      {kind === 'score' && (<><circle cx="32" cy="24" r="16" stroke="var(--color-grey)" strokeWidth="5" fill="none" /><circle className="fx-ring" cx="32" cy="24" r="16" stroke="var(--color-ink)" strokeWidth="5" fill="none" strokeLinecap="round" strokeDasharray="100.5" transform="rotate(-90 32 24)" /></>)}
+      {kind === 'timeline' && (<><line x1="14" y1="6" x2="14" y2="44" {...s} />{[10, 24, 38].map((y, i) => (<g key={y}><circle className="fx-pulse" style={d(i)} cx="14" cy={y} r="4" fill={i === 0 ? 'var(--color-light)' : 'var(--color-ink)'} /><rect x="24" y={y - 2} width={30 - i * 6} height="4" rx="2" fill="var(--color-grey)" /></g>))}</>)}
       {kind === 'grid' && Array.from({ length: 24 }, (_, i) => (
-        <motion.rect key={i} x={6 + (i % 6) * 9} y={6 + Math.floor(i / 6) * 9} width="7" height="7" rx="1.5" fill={['#e9e9e3', '#ded3b9', '#b9ad8f', '#1f1e1f'][(i * 7) % 4]} {...loop({ animate: { opacity: [1, 0.4, 1] }, transition: { delay: (i % 5) * 0.25 } })} />
+        <rect key={i} className="fx-blink" style={d(i % 5)} x={6 + (i % 6) * 9} y={6 + Math.floor(i / 6) * 9} width="7" height="7" rx="1.5" fill={['#e9e9e3', '#ded3b9', '#b9ad8f', 'var(--color-ink)'][(i * 7) % 4]} />
       ))}
-      {kind === 'square' && (<>{[[12, 10], [52, 10], [12, 40], [52, 40], [32, 4]].map(([x, y], i) => (<g key={i}><line x1="32" y1="25" x2={x} y2={y} {...s} /><motion.circle cx={x} cy={y} r="4.5" fill="var(--color-paper)" stroke="var(--color-ink)" strokeWidth="1.5" {...loop({ animate: { r: [4.5, 5.5, 4.5] }, transition: { delay: i * 0.2 } })} /></g>))}<circle cx="32" cy="25" r="7" fill="var(--color-ink)" /></>)}
+      {kind === 'square' && (<>{[[12, 10], [52, 10], [12, 40], [52, 40], [32, 4]].map(([x, y], i) => (<g key={i}><line x1="32" y1="25" x2={x} y2={y} {...s} /><circle className="fx-pulse" style={d(i)} cx={x} cy={y} r="4.5" fill="var(--color-paper)" stroke="var(--color-ink)" strokeWidth="1.5" /></g>))}<circle cx="32" cy="25" r="7" fill="var(--color-ink)" /></>)}
     </svg>
   )
 }
