@@ -4,12 +4,14 @@
   Design tokens, matched to our Round 1 slides:
   paper with a faint grid, ink panels, grey and beige accents,
   warm window light as the single bright colour.
-  Headings in Instrument Serif, body in Inter.
+  Type follows apple.com: SF Pro Display / SF Pro Text through the system
+  font stack (Apple does not allow SF Pro to be hosted on other sites),
+  with Inter loaded as the closest match on Windows and Android.
 */
 
 @theme {
-  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --color-paper: #f7f7f3;
   --color-ink: #1f1e1f;
@@ -39,13 +41,13 @@
   --crane: #1f1e1f;
   --flag: #f5b942;
   --plaque: #ded3b9;
-  --slab-top: #efefe9;
+  --slab-top: #f6f6f2;
   --slab-l: #ded3b9;
   --slab-r: #cdcec8;
-  --road: #e2e2dc;
+  --road: #e9e9e4;
   --curb: #ffffff;
   --lane: #ffffff;
-  --grass: #e6e7dc;
+  --grass: #eef0e8;
   --tree: #c9cfbd;
   --tree-hi: #dfe3d6;
   --trunk: #8c8c88;
@@ -54,8 +56,8 @@
   --car-a: #1f1e1f;
   --car-b: #ded3b9;
   --shade: rgba(31, 30, 31, 0.08);
-  --sky-top: #f7f7f3;
-  --sky-bottom: #efece3;
+  --sky-top: #ffffff;
+  --sky-bottom: #fcfcfa;
 }
 
 /* city: night, switched on the city wrapper only */
@@ -116,24 +118,25 @@ body {
 
 @layer components {
   .display {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 0.95;
-    font-size: clamp(3rem, 8vw + 0.5rem, 7rem);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    font-size: clamp(2.75rem, 7vw + 0.5rem, 6rem);
   }
   .title {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.015em;
-    line-height: 1.02;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.06;
     font-size: clamp(2.25rem, 4.5vw + 0.5rem, 4rem);
   }
   .subtitle {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    line-height: 1.1;
-    font-size: clamp(1.5rem, 2vw + 0.75rem, 2.1rem);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(1.4rem, 1.6vw + 0.75rem, 1.9rem);
   }
   .lead {
     font-size: clamp(1.05rem, 0.6vw + 0.9rem, 1.25rem);
@@ -185,6 +188,29 @@ body {
     height: 2.25rem;
     padding: 0 1rem;
     font-size: 0.85rem;
+  }
+
+  .field {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--color-grey);
+    border-radius: 0.9rem;
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  .field:hover {
+    border-color: var(--color-soft);
+  }
+  .field:focus-within,
+  .field:focus {
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 3px rgba(31, 30, 31, 0.08);
+    outline: none;
+  }
+  input.field,
+  select.field,
+  textarea.field {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
   }
 
   .card {

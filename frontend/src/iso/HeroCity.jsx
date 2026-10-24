@@ -129,7 +129,7 @@ export default function HeroCity() {
           className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+14px)] rounded-xl bg-ink px-3.5 py-2.5 text-left text-paper shadow-lg"
           style={tipPos}
         >
-          <div className="font-serif text-lg leading-tight whitespace-nowrap">{tip.name}</div>
+          <div className="font-display text-lg leading-tight whitespace-nowrap">{tip.name}</div>
           <div className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-white/60 whitespace-nowrap">
             {tip.solid} built · {tip.status === 'paused' || tip.status === 'reviving' ? `${tip.pending} to go · ` : ''}
             {STATUS_TEXT[tip.status]}

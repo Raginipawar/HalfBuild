@@ -40,7 +40,7 @@ export default function HelloIntro({ onDone }) {
         <AnimatePresence mode="wait">
           <motion.span
             key={WORDS[i]}
-            className="font-serif text-[clamp(3rem,10vw,7rem)] leading-none"
+            className="font-display text-[clamp(3rem,10vw,7rem)] leading-none"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -18 }}

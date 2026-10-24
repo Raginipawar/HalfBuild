@@ -71,7 +71,7 @@ export default function MenuOverlay({ open, onClose }) {
         >
           <div className="mx-auto flex min-h-full max-w-7xl flex-col px-4 sm:px-8">
             <div className="flex h-16 items-center justify-between border-b border-white/15">
-              <span className="font-serif text-2xl tracking-[0.12em]">HALFBUILT</span>
+              <span className="font-display text-2xl tracking-[0.12em]">HALFBUILT</span>
               <button
                 type="button"
                 onClick={onClose}
@@ -87,7 +87,7 @@ export default function MenuOverlay({ open, onClose }) {
                   <motion.li key={l.label} {...item(i)} className="border-b border-white/15">
                     <Link to={l.to} onClick={onClose} className="group flex items-baseline gap-4 py-3 sm:gap-8 sm:py-4">
                       <span className="w-8 text-xs text-white/50">0{i + 1}</span>
-                      <span className="flex-1 font-serif text-[clamp(2.25rem,6vw,4.5rem)] leading-none transition-[transform,color] duration-300 group-hover:translate-x-3 group-hover:text-light">
+                      <span className="flex-1 font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-none transition-[transform,color] duration-300 group-hover:translate-x-3 group-hover:text-light">
                         {l.label}
                       </span>
                       <span className="hidden text-sm text-white/55 md:block">{l.hint}</span>

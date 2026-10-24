@@ -27,7 +27,7 @@ export function HalfCircle({ className = '', side = 'bottom' }) {
 export function PillHeading({ children, number, note, className = '' }) {
   return (
     <div className={`flex flex-wrap items-center gap-x-5 gap-y-2 ${className}`}>
-      <h2 className="inline-block -rotate-1 rounded-full bg-grey px-6 py-2 font-serif text-[clamp(1.6rem,3vw,2.4rem)] uppercase leading-none tracking-tight">
+      <h2 className="inline-block -rotate-1 rounded-full bg-grey px-6 py-2 font-display text-[clamp(1.6rem,3vw,2.4rem)] uppercase leading-none tracking-tight">
         {children}
       </h2>
       {(number || note) && (

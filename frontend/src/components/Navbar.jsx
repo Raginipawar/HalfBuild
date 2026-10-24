@@ -19,7 +19,7 @@ export default function Navbar() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-8">
           <Link to="/" className="flex items-center gap-2.5" aria-label="HALFBUILT home">
             <Logo />
-            <span className="font-serif text-2xl leading-none tracking-[0.12em]">HALFBUILT</span>
+            <span className="font-display text-2xl leading-none tracking-[0.12em]">HALFBUILT</span>
           </Link>
 
           <div className="flex items-center gap-2">

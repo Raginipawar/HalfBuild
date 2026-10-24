@@ -14,7 +14,7 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-2.5">
             <span className="rounded bg-paper p-1"><Logo size={22} /></span>
-            <span className="font-serif text-2xl tracking-[0.12em]">HALFBUILT</span>
+            <span className="font-display text-2xl tracking-[0.12em]">HALFBUILT</span>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
             Unfinished does not mean failed. It means the next floor has not been built yet.
