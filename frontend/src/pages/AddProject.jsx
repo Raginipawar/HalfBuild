@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { ChipsInput, Field } from '../components/ui'
 import BuildingView from '../iso/BuildingView'
-import { REASONS } from '../logic/buildingState'
+import { REASONS, daysSince } from '../logic/buildingState'
+import { fetchRepos, repoToForm } from '../logic/github'
+import { Github, PenLine, Search } from 'lucide-react'
 
 const today = () => new Date().toISOString().slice(0, 10)
 
@@ -18,6 +20,7 @@ export default function AddProject() {
     tools: [], repo: '', demo: '',
   })
   const [error, setError] = useState('')
+  const [mode, setMode] = useState('manual')
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
   const preview = {
@@ -54,7 +57,17 @@ export default function AddProject() {
       <p className="lead mt-3 max-w-2xl">Each finished part becomes a solid floor. Each unfinished part becomes scaffolding. Watch it rise as you type.</p>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
-        <form onSubmit={submit} className="grid gap-5 sm:grid-cols-2" noValidate>
+        <div>
+        <div className="mb-6 inline-flex rounded-full border border-ink p-1" role="tablist" aria-label="How to add">
+          {[['manual', 'Fill in manually', PenLine], ['github', 'Import from GitHub', Github]].map(([k, label, Icon]) => (
+            <button key={k} type="button" role="tab" aria-selected={mode === k} onClick={() => setMode(k)}
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium ${mode === k ? 'bg-ink text-paper' : 'hover:bg-grey/50'}`}>
+              <Icon size={15} /> {label}
+            </button>
+          ))}
+        </div>
+        {mode === 'github' && <GithubImport onPick={(fields) => { setForm({ ...form, ...fields }); setMode('manual') }} />}
+        <form hidden={mode !== 'manual'} onSubmit={submit} className="grid gap-5 sm:grid-cols-2" noValidate>
           <div className="sm:col-span-2">
             <Field label="Name" htmlFor="name" error={error}>
               <input id="name" className="field" value={form.name} onChange={(e) => { setError(''); set('name')(e) }} placeholder="Habit Tracker" />
@@ -106,6 +119,7 @@ export default function AddProject() {
           </Field>
           <button type="submit" className="btn btn-primary sm:col-span-2">Raise the building</button>
         </form>
+        </div>
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <div
@@ -121,5 +135,58 @@ export default function AddProject() {
         </aside>
       </div>
     </main>
+  )
+}
+
+// Step 1 of the GitHub path: pick one of your public repositories.
+// It fills the form, then you add the finished and unfinished parts yourself.
+function GithubImport({ onPick }) {
+  const [user, setUser] = useState('')
+  const [state, setState] = useState({ status: 'idle', repos: [], error: '' })
+
+  const load = async (e) => {
+    e.preventDefault()
+    if (!user.trim()) return
+    setState({ status: 'loading', repos: [], error: '' })
+    const res = await fetchRepos(user)
+    setState(res.ok ? { status: 'done', repos: res.repos, error: '' } : { status: 'error', repos: [], error: res.error })
+  }
+
+  return (
+    <div className="card p-5">
+      <form onSubmit={load} className="flex flex-wrap gap-2">
+        <label className="field flex flex-1 items-center gap-2 px-3">
+          <Github size={16} className="text-muted" />
+          <span className="sr-only">GitHub username</span>
+          <input value={user} onChange={(e) => setUser(e.target.value)} placeholder="Your GitHub username" className="w-full bg-transparent py-2.5 text-sm outline-none" />
+        </label>
+        <button className="btn btn-primary" disabled={state.status === 'loading'}><Search size={15} /> {state.status === 'loading' ? 'Looking' : 'Find repositories'}</button>
+      </form>
+      <p className="mt-2 text-xs text-muted">Only public repositories are read. Nothing is stored except the one you pick.</p>
+      {state.error && <p className="mt-3 text-sm font-medium text-[#a1361f]" role="alert">{state.error}</p>}
+      {state.status === 'done' && (
+        state.repos.length ? (
+          <ul className="mt-4 max-h-96 divide-y divide-line overflow-y-auto rounded-xl border border-line">
+            {state.repos.map((r) => {
+              const idle = daysSince(r.pushed_at)
+              return (
+                <li key={r.id}>
+                  <button type="button" onClick={() => onPick(repoToForm(r))} className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left hover:bg-paper">
+                    <span>
+                      <span className="block font-medium">{r.name}</span>
+                      <span className="line-clamp-1 text-sm text-muted">{r.description || 'No description'}</span>
+                    </span>
+                    <span className="shrink-0 text-right text-xs text-muted">
+                      {r.language && <span className="block">{r.language}</span>}
+                      <span className={idle > 180 ? 'font-semibold text-ink' : ''}>untouched {idle}d</span>
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        ) : <p className="mt-3 text-sm text-muted">No public repositories found.</p>
+      )}
+    </div>
   )
 }

@@ -32,7 +32,7 @@ export function layoutCity(projects) {
   return { buildings, empty, sizeX: cols * STEP, sizeY: rows * STEP, cols, rows }
 }
 
-export default function City({ projects, users = [], highlightOwner = null, interactive = true, minWidth = 0 }) {
+export default function City({ projects, users = [], highlightOwner = null, interactive = true, minWidth = 0, extraDays = 0 }) {
   const reduce = useReducedMotion()
   const navigate = useNavigate()
   const [hover, setHover] = useState(null)
@@ -167,7 +167,7 @@ export default function City({ projects, users = [], highlightOwner = null, inte
                   x={b.x} y={b.y} w={b.w} d={b.d}
                   solid={p.completedParts.length}
                   pending={p.pendingParts.length}
-                  lit={litRatio(p)}
+                  lit={litRatio(p, extraDays)}
                   status={p.status}
                   seed={i + 3}
                   delay={0.1 + i * 0.06}
@@ -179,7 +179,7 @@ export default function City({ projects, users = [], highlightOwner = null, inte
 
         {tip && (
           <div
-            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+14px)] rounded-xl bg-ink px-3.5 py-2.5 text-paper shadow-lg"
+            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+14px)] on-night rounded-xl px-3.5 py-2.5 shadow-lg"
             style={tipPos}
           >
             <div className="font-display text-base font-semibold leading-tight whitespace-nowrap">{tip.project.name}</div>

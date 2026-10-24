@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ArrowRight, Moon, Plus, Search, Sun } from 'lucide-react'
-import HeroCity from '../iso/HeroCity'
+import { ArrowRight, Moon, Pause, Play, Plus, Search, Sun } from 'lucide-react'
 import City from '../iso/City'
 import BuildingView from '../iso/BuildingView'
 import ActivityGrid from '../components/ActivityGrid'
@@ -12,6 +11,9 @@ import { HalfCircle, PillHeading, PixelSquares } from '../components/Decor'
 import { useStore, useCurrentUser } from '../store/useStore'
 import { CONFIG, inspect } from '../logic/revivalScore'
 import { rankBuilders } from '../logic/leaderboard'
+import { litRatio } from '../logic/buildingState'
+import { useCityNight } from '../lib/theme'
+import StoryHero from '../components/StoryHero'
 
 const recent = new Date().toISOString()
 const SAMPLE_PAUSED = { name: 'Paused', completedParts: ['a', 'b', 'c'], pendingParts: ['d', 'e'], status: 'paused', reason: 'time', lastTouchedOn: '2026-03-01T00:00:00Z' }
@@ -20,7 +22,7 @@ const SAMPLE_REVIVING = { name: 'Reviving', completedParts: ['a', 'b', 'c', 'd']
 export default function Landing() {
   return (
     <main>
-      <Hero />
+      <StoryHero />
       <ProblemStrip />
       <HowItWorks />
       <Features />
@@ -36,64 +38,6 @@ export default function Landing() {
 }
 
 const Container = ({ children, className = '' }) => <div className={`mx-auto max-w-7xl px-4 sm:px-8 ${className}`}>{children}</div>
-
-function Hero() {
-  const user = useCurrentUser()
-  const reduce = useReducedMotion()
-  const [night, setNight] = useState(false)
-  const rise = (i) => (reduce ? {} : { initial: { opacity: 0, y: 28 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.1 + i * 0.09, type: 'spring', stiffness: 120, damping: 18 } })
-
-  return (
-    <section className="relative overflow-hidden">
-      <HalfCircle side="bottom" className="pointer-events-none absolute -right-16 -top-2 w-56 sm:w-80" />
-      <PixelSquares className="absolute left-4 top-6 sm:left-8" />
-      <Container className="relative pb-10 pt-20 text-center sm:pt-28">
-        <motion.p {...rise(0)} className="eyebrow">For every project you started and never finished</motion.p>
-        <motion.h1 {...rise(1)} className="display mx-auto mt-6 max-w-5xl">
-          Every unfinished project deserves <span className="text-soft">another floor.</span>
-        </motion.h1>
-        <motion.p {...rise(2)} className="lead mx-auto mt-6 max-w-2xl">
-          Turn your abandoned projects into a living city, then decide which ones to bring back.
-        </motion.p>
-        <motion.div {...rise(3)} className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Link to={user ? '/city' : '/signup'} className="btn btn-primary">Build my city <ArrowRight size={16} /></Link>
-          <a href="#demo-city" className="btn btn-ghost">See a demo city</a>
-        </motion.div>
-      </Container>
-
-      <Container>
-        <motion.div {...rise(4)}>
-          <div
-            data-city={night ? 'night' : 'day'}
-            className="relative overflow-hidden rounded-[1.75rem] border border-ink transition-colors duration-700"
-            style={{ background: 'linear-gradient(180deg, var(--sky-top), var(--sky-bottom))' }}
-          >
-            <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4 sm:p-6">
-              <span className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium ${night ? 'border-white/20 bg-white/10 text-paper' : 'border-ink bg-paper'}`}>
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-light opacity-70" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-light" />
-                </span>
-                Live city · 13 projects
-              </span>
-              <button
-                type="button"
-                onClick={() => setNight(!night)}
-                aria-pressed={night}
-                className={`btn btn-sm border ${night ? 'border-white/30 text-paper hover:bg-white/10' : 'border-ink bg-paper hover:bg-ink hover:text-paper'}`}
-              >
-                {night ? <Sun size={15} /> : <Moon size={15} />} {night ? 'City sleeping' : 'City awake'}
-              </button>
-            </div>
-            <div className="overflow-x-auto px-1 pb-2 pt-16 sm:px-12 sm:pt-12">
-              <div className="min-w-[560px]"><HeroCity /></div>
-            </div>
-          </div>
-        </motion.div>
-      </Container>
-    </section>
-  )
-}
 
 function ProblemStrip() {
   const lines = [
@@ -249,14 +193,29 @@ function DemoCity() {
   const users = useStore((s) => s.users)
   const [q, setQ] = useState('')
   const [owner, setOwner] = useState(null)
-  const [night, setNight] = useState(false)
+  const [night, setNight] = useCityNight()
+  const [months, setMonths] = useState(0)
+  const [playing, setPlaying] = useState(false)
+  const extraDays = Math.round(months * 30.4)
+  const stillLit = projects.filter((p) => litRatio(p, extraDays) > 0).length
   const matches = q.trim() ? users.filter((u) => `${u.name} ${u.username}`.toLowerCase().includes(q.toLowerCase())).slice(0, 5) : []
   const picked = users.find((u) => u.id === owner)
+
+  // play: move the dial forward one month at a time, then stop at a year
+  useEffect(() => {
+    if (!playing) return
+    if (months >= 12) { setPlaying(false); return }
+    const t = setTimeout(() => setMonths((m) => Math.min(12, m + 1)), 550)
+    return () => clearTimeout(t)
+  }, [playing, months])
 
   return (
     <section className="mt-28 scroll-mt-24" id="demo-city">
       <Container>
-        <Reveal><PillHeading number="04" note="Six sample builders, one shared city">Demo city</PillHeading></Reveal>
+        <Reveal>
+          <PillHeading number="04" note="Six sample builders, one shared city">Demo city</PillHeading>
+          <p className="lead mt-5 max-w-2xl">Find a builder, flip day and night, or press play to fast forward a year and watch untouched projects go dark.</p>
+        </Reveal>
         <Reveal className="mt-10">
           <div
             data-city={night ? 'night' : 'day'}
@@ -293,7 +252,31 @@ function DemoCity() {
               </button>
             </div>
             <div className="p-2 sm:p-8">
-              <City projects={projects} users={users} highlightOwner={owner} minWidth={700} />
+              <City projects={projects} users={users} highlightOwner={owner} minWidth={700} extraDays={extraDays} />
+            </div>
+            {/* time dial: preview what happens if nobody touches these projects */}
+            <div className={`flex flex-wrap items-center gap-4 border-t p-4 sm:px-6 ${night ? 'border-white/15 text-paper' : 'border-ink/20'}`}>
+              <button
+                type="button"
+                onClick={() => { if (months >= 12) setMonths(0); setPlaying(!playing) }}
+                className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${night ? 'bg-paper text-[#1f1e1f]' : 'bg-ink text-paper'}`}
+                aria-label={playing ? 'Pause time' : 'Play time forward'}
+              >
+                {playing ? <Pause size={16} /> : <Play size={16} />}
+              </button>
+              <div className="min-w-[200px] flex-1">
+                <label htmlFor="time-dial" className="flex justify-between text-xs font-medium uppercase tracking-[0.14em]">
+                  <span>Time machine</span>
+                  <span>{months === 0 ? 'Today' : `${months} ${months === 1 ? 'month' : 'months'} from now`}</span>
+                </label>
+                <input id="time-dial" type="range" min={0} max={12} step={1} value={months}
+                  onChange={(e) => { setPlaying(false); setMonths(Number(e.target.value)) }}
+                  className="mt-1 w-full accent-[var(--color-light)]" />
+              </div>
+              <p className={`text-sm ${night ? 'text-white/70' : 'text-muted'}`}>
+                <b className={night ? 'text-white' : 'text-ink'}>{stillLit}</b> of {projects.length} buildings still lit
+                {months > 0 && '. Only revived projects keep their lights on.'}
+              </p>
             </div>
           </div>
           <p className="mt-3 text-center text-xs text-muted">Hover a building to read it. Click to open it. Drag sideways to explore.</p>
@@ -391,7 +374,7 @@ const FAQS = [
   ['Is this a task manager?', 'No. There are no boards, sprints or deadlines. HALFBUILT only helps you reflect on a paused project and decide whether to bring it back.'],
   ['How is the score calculated?', 'Six questions. Interest is worth 30 points, completion 25, the reason it stopped 20, relevance today 15 and effort left 10. Reusable parts do not add points, they help pick the path. You can see the full breakdown after every inspection.'],
   ['Do I need an account?', 'You can explore the demo city, leaderboard and Builders\' Square without one. To add your own projects you create a free account in a few seconds.'],
-  ['Is my data private?', 'Everything is stored only in your own browser. There is no server, so nothing leaves your device.'],
+  ['Is my data private?', 'Everything is stored only in your own browser. There is no server. If you import from GitHub, only your public repository list is read, and only the one you pick is saved.'],
   ['Can I revive with someone else?', 'Yes. Mark a project open for co-builders with the skills it needs. Others can request to join and you choose who to accept.'],
   ['Does it cost anything?', 'No. HALFBUILT is free.'],
 ]

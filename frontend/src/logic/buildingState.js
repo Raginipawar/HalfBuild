@@ -19,11 +19,12 @@ export const REASONS = {
 export const daysSince = (iso) => Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 86400000))
 
 // Share of windows that are lit (0 to 1).
-export function litRatio(project) {
+// extraDays lets the time dial preview the future: what if nobody touches it for a while?
+export function litRatio(project, extraDays = 0) {
   const mode = (STATUS[project.status] ?? STATUS.paused).lights
   if (mode === 'all') return 1
   if (mode === 'none') return 0
-  const d = daysSince(project.lastTouchedOn)
+  const d = daysSince(project.lastTouchedOn) + extraDays
   if (d < 30) return 0.85
   if (d <= 180) return 0.5
   return 0

@@ -184,7 +184,9 @@ Every result comes with reasoning and a two hour first step. **The builder alway
 | Feature | What it does |
 |---|---|
 | **My City** | Every project as an isometric building, with a list view, search and filters as a non visual alternative |
-| **Add a project** | A form with a live building preview that grows as you type parts |
+| **Add a project** | Fill it in by hand, or **import from GitHub** by username (public repos only). The building preview grows as you type parts |
+| **City story** | The home page opens with a scroll driven story: plots appear, floors rise, lights go out, then a crane brings one back |
+| **Time machine** | Inspired by procedural city toys: press play to fast forward a year and watch untouched projects go dark |
 | **Project page** | Building with its reason sign, goal, parts, tools, links, status actions |
 | **Construction log** | A dated timeline of every change, newest first |
 | **Site Inspection** | Six questions, Revival Score ring, recommended path, reasoning, first step |
@@ -194,7 +196,7 @@ Every result comes with reasoning and a two hour first step. **The builder alway
 | **Revival Leaderboard** | Ranks builders by projects revived, not started. All time and this month |
 | **Builders' Square** | Open a project to co-builders with the skills it needs; others request to join |
 | **Multilingual hello** | Hello, Namaste, Hola, Bonjour, Konnichiwa, Hallo, once per session, skippable |
-| **Light and dark** | Dark mode turns the city into a night scene with glowing windows |
+| **Light and dark** | Site wide dark mode; the city switches to night with glowing windows |
 
 ---
 
