@@ -27,7 +27,7 @@ function PassAndGate({ name, line, onEnter, busy, gateTitle }) {
             </div>
           </div>
         </DragCard>
-        <DropZone accepts={['pass']} onDrop={onEnter} title={busy ? 'Opening the gate' : gateTitle} hint="Drop your pass here" />
+        <DropZone accepts={['pass']} onDrop={() => onEnter()} title={busy ? 'Opening the gate' : gateTitle} hint="Drop your pass here" />
       </div>
       <CanvasHint />
     </div>

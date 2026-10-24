@@ -129,7 +129,7 @@ export default function ProjectDetail() {
 function BuildingPanel({ project, isOwner, children }) {
   const completePart = useStore((s) => s.completePart)
   const markRebuilt = useStore((s) => s.markRebuilt)
-  const frame = 'flex flex-col items-center justify-end !rounded-[1.75rem] p-8'
+  const frame = 'flex flex-col items-center justify-end !rounded-[1.75rem] p-8 [background:linear-gradient(180deg,var(--sky-top),var(--sky-bottom))]'
   if (isOwner && project.status === 'reviving') {
     return (
       <DropZone

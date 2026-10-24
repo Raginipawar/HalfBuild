@@ -49,7 +49,9 @@ export const useCanvas = () => useContext(CanvasContext)
 export function DragCard({ type, data, children, className = '', disabled = false, label }) {
   const c = useCanvas()
   const picked = c.drag?.keyboard && c.drag.type === type && JSON.stringify(c.drag.data) === JSON.stringify(data)
-  const clientPoint = (info) => ({ x: info.point.x - window.scrollX, y: info.point.y - window.scrollY })
+  // use the pointer's viewport position straight from the event, so drops work on scrolled pages
+  const clientPoint = (event, info) =>
+    event && 'clientX' in event ? { x: event.clientX, y: event.clientY } : { x: info.point.x - window.scrollX, y: info.point.y - window.scrollY }
 
   return (
     <motion.div
@@ -60,12 +62,12 @@ export function DragCard({ type, data, children, className = '', disabled = fals
       whileDrag={{ scale: 1.05, rotate: -2, zIndex: 60, boxShadow: '0 24px 48px -12px rgba(0,0,0,0.35)' }}
       whileHover={disabled ? undefined : { y: -2 }}
       onDragStart={() => c.setDrag({ type, data })}
-      onDrag={(_, info) => {
-        const p = clientPoint(info)
+      onDrag={(event, info) => {
+        const p = clientPoint(event, info)
         c.setOver(c.zoneAt(p.x, p.y, type))
       }}
-      onDragEnd={(_, info) => {
-        const p = clientPoint(info)
+      onDragEnd={(event, info) => {
+        const p = clientPoint(event, info)
         const id = c.zoneAt(p.x, p.y, type)
         if (id) c.drop(id, { type, data })
         else { c.setDrag(null); c.setOver(null) }

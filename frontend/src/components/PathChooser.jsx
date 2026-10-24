@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { CONFIG, PATH_ORDER } from '../logic/revivalScore'
 import { useStore, useCurrentUser } from '../store/useStore'
@@ -14,7 +14,9 @@ const NEEDS_DETAIL = ['changeIdea', 'archive', 'repurpose']
 export default function PathChooser({ project, recommended, onApplied }) {
   const applyPath = useStore((s) => s.applyPath)
   const user = useCurrentUser()
-  const others = useStore((s) => s.projects.filter((p) => p.ownerId === user?.id && p.id !== project.id && p.status !== 'landmark'))
+  // select the stable array, then filter: a new array from the selector would re-render forever
+  const projects = useStore((s) => s.projects)
+  const others = useMemo(() => projects.filter((p) => p.ownerId === user?.id && p.id !== project.id && p.status !== 'landmark'), [projects, user?.id, project.id])
   const [picked, setPicked] = useState(null)
   const [goal, setGoal] = useState(project.goal)
   const [lessons, setLessons] = useState('')
@@ -62,7 +64,7 @@ export default function PathChooser({ project, recommended, onApplied }) {
         <CanvasHint>Drag a path onto your building to start it.</CanvasHint>
       </div>
 
-      <DropZone accepts={picked ? ['path', 'plan'] : ['path']} onDrop={onDrop} title="Your building" className="flex flex-col items-center p-4">
+      <DropZone accepts={picked ? ['path', 'plan'] : ['path']} onDrop={onDrop} title="Your building" className="flex flex-col items-center p-4 [background:linear-gradient(180deg,var(--sky-top),var(--sky-bottom))]">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Your building · drop a path here</p>
         <BuildingView project={project} showSign={false} className="h-56 w-full" minFloors={6} />
         <AnimatePresence>

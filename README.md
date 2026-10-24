@@ -30,6 +30,33 @@
 
 ---
 
+## 🎨 Surprise Challenge: The Canvas Protocol
+
+At the 6 hour mark the rules changed: **no standard buttons for primary actions**. Every action must happen by **dragging a data card into an Action Zone**.
+
+HALFBUILT already speaks construction, so the new rules fit naturally. **The data model, store actions and scoring logic did not change.** Only the interaction layer did, through one new file (`components/Canvas.jsx`) with two pieces: `DragCard` and `DropZone`.
+
+| Primary action | Data card | Action Zone |
+|---|---|---|
+| Log in / Sign up | **Builder pass** (shows what you typed) | **Site gate** |
+| Save a new project | **Blueprint** | **Empty plot** (the live building preview) |
+| Answer the Site Inspection | **Answer cards** | **Inspection slot** (files it, moves on) |
+| Choose a revival path | **Path cards** | **Your building** |
+| Confirm a path that needs details | **Signed plan** | **Your building** |
+| Finish a part | **Scaffolding part** | **Your building**: a floor rises |
+| Mark as rebuilt | **Rebuilt flag** | **Your building** |
+| Open or close for co-builders | **Project card** | **Builders' Square** / **Private** |
+| Accept or decline a join request | **Request card** | **Welcome aboard** / **Not now** |
+| Ask to join a project | **Your builder card** | **Join this build** |
+| Log out | **Builder pass** | **Exit gate** |
+| Reset demo data | **Demolition order** | **Demolition zone** |
+
+**Intuitive by design:** zones glow and pulse the moment a matching card is picked up, say "Let go to do it" on hover, and cards snap back if dropped anywhere else.
+**Works everywhere:** mouse and touch drag (Framer Motion), plus keyboard: focus a card, Space to pick it up, Tab to a zone, Space to drop, Escape to cancel.
+**Still allowed as normal controls:** navigation links, the menu, theme toggle, tabs, filters, search and form inputs, because none of them change your data.
+
+---
+
 ## The 60 second version
 
 > Every builder has a GitHub full of projects they started and never finished. They stopped for good reasons: exams, a hackathon that ended, scope that grew, a bug that would not die. Months later the repo is still there, but **the context is gone and the project has turned into guilt.**
@@ -281,8 +308,8 @@ Live build: **24 October 2026, 12:00 to 23:59 IST.**
 | 15:00 | 3 · Home page: problem, how it works, features, live score demo, demo city, community, FAQ | ✅ |
 | 16:00 | 4 · About and How it works pages with diagrams | ✅ |
 | 17:00 | 5 · Auth, My City, Add project, Project detail, Site Inspection | ✅ |
-| 18:00 | 6 · Leaderboard, Builders' Square, public profiles, **Surprise Challenge** | ⏳ |
-| 21:00 | 7 · Polish and deploy | |
+| 18:00 | 6 · Leaderboard, Builders' Square, public profiles, **Surprise Challenge: Canvas Protocol** | ✅ |
+| 21:00 | 7 · Polish: watercolour theme, city story, City tour, glass header, lanyard pass | ✅ |
 | 23:00 | 8 · Ship | |
 
 ---|---|:-:|
