@@ -1,306 +1,201 @@
 @import "tailwindcss";
 
 /*
-  Design tokens. Type system and neutrals follow rerun.io:
-  system sans at weight 450 with tight tracking, JetBrains Mono for
-  labels and buttons, hairline borders, small radii.
-  Colour comes from a soft baby pastel gradient and the city itself.
+  Design tokens, matched to our Round 1 slides:
+  paper with a faint grid, ink panels, grey and beige accents,
+  warm window light as the single bright colour.
+  Headings in Instrument Serif, body in Inter.
 */
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 
-@theme inline {
-  --color-bg: var(--bg);
-  --color-fg: var(--fg);
-  --color-muted: var(--muted);
-  --color-subtle: var(--subtle);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-panel: var(--panel);
-  --color-peach: var(--peach);
-  --color-pink: var(--pink);
-  --color-lilac: var(--lilac);
-  --color-sky: var(--sky);
-  --color-mint: var(--mint);
-  --color-butter: var(--butter);
-  --color-light: var(--light);
+  --color-paper: #f7f7f3;
+  --color-ink: #1f1e1f;
+  --color-grey: #cdcec8;
+  --color-beige: #ded3b9;
+  --color-muted: #6f6f6b;   /* darker than #8C8C88 so small text passes WCAG AA */
+  --color-soft: #8c8c88;
+  --color-light: #f5b942;
+  --color-line: #e4e4de;
+  --color-card: #ffffff;
 }
 
 :root {
   color-scheme: light;
-  --bg: #ffffff;
-  --fg: #0a0a0a;
-  --muted: #525252;
-  --subtle: #404040;
-  --line: #e5e5e5;
-  --line-strong: #d4d4d4;
-  --panel: #fafafa;
 
-  /* baby pastels */
-  --peach: #ffe4d6;
-  --pink: #fde2ef;
-  --lilac: #e9e3ff;
-  --sky: #dcebff;
-  --mint: #ddf5ea;
-  --butter: #fff4cc;
-
-  /* city */
-  --light: #ffc56e;            /* lit window, main accent */
-  --window-off: #c9cde3;
+  /* city: day */
+  --window-on: #f5b942;
+  --window-off: #c4c5bf;
   --face-t: #ffffff;
-  --face-l: #eef0fa;
-  --face-r: #dde1f3;
-  --stone-t: #fbf7f1;
-  --stone-l: #f1ebe2;
-  --stone-r: #e4dccf;
-  --edge: rgba(70, 70, 110, 0.22);
-  --scaffold: #8f8fb0;
-  --crane: #f2a07f;
-  --flag: #f59ec0;
-  --plaque: #e7d7b8;
-  --slab-top-a: #f3f0ff;
-  --slab-top-b: #eaf7f1;
-  --slab-l: #e0dcf5;
-  --slab-r: #cfd9f0;
-  --road: #e6e4f2;
+  --face-l: #f1f1ec;
+  --face-r: #d9dad4;
+  --stone-t: #f6f1e6;
+  --stone-l: #ebe2cf;
+  --stone-r: #ded3b9;
+  --edge: rgba(31, 30, 31, 0.55);
+  --scaffold: #8c8c88;
+  --crane: #1f1e1f;
+  --flag: #f5b942;
+  --plaque: #ded3b9;
+  --slab-top: #efefe9;
+  --slab-l: #ded3b9;
+  --slab-r: #cdcec8;
+  --road: #e2e2dc;
   --curb: #ffffff;
   --lane: #ffffff;
-  --grass: #d4f0e2;
-  --tree: #b9e6cf;
-  --tree-hi: #d6f3e4;
-  --trunk: #b7a59a;
-  --lamp: #ffd28a;
-  --glow-alpha: 0.35;
-  --car-a: #f9b9d3;
-  --car-b: #a9cdf7;
-  --shade: rgba(90, 90, 140, 0.10);
-
-  --sky-a: #e4f0ff;
-  --sky-b: #f0e9ff;
-  --sky-c: #fde8f2;
-  --sky-d: #fff0e4;
+  --grass: #e6e7dc;
+  --tree: #c9cfbd;
+  --tree-hi: #dfe3d6;
+  --trunk: #8c8c88;
+  --lamp: #f5b942;
+  --glow-alpha: 0.3;
+  --car-a: #1f1e1f;
+  --car-b: #ded3b9;
+  --shade: rgba(31, 30, 31, 0.08);
+  --sky-top: #f7f7f3;
+  --sky-bottom: #efece3;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #000000;
-    --fg: #f5f5f5;
-    --muted: #a3a3a3;
-    --subtle: #d4d4d4;
-    --line: #262626;
-    --line-strong: #404040;
-    --panel: #0a0a0a;
-    --peach: #3a2a24;
-    --pink: #3a2232;
-    --lilac: #2a2545;
-    --sky: #1c2a44;
-    --mint: #1a3329;
-    --butter: #3a331c;
-    --light: #ffc56e;
-    --window-off: #22233a;
-    --face-t: #4a4d72;
-    --face-l: #34365a;
-    --face-r: #282a47;
-    --stone-t: #5a5560;
-    --stone-l: #48434e;
-    --stone-r: #3a3640;
-    --edge: rgba(0, 0, 0, 0.35);
-    --scaffold: #8a8cb8;
-    --crane: #f2a07f;
-    --flag: #f59ec0;
-    --plaque: #b8a37f;
-    --slab-top-a: #1b1c33;
-    --slab-top-b: #16262a;
-    --slab-l: #14152a;
-    --slab-r: #0f1022;
-    --road: #24253d;
-    --curb: #34365a;
-    --lane: #4b4d73;
-    --grass: #1d3a30;
-    --tree: #2f6b55;
-    --tree-hi: #3d8569;
-    --trunk: #5b4b44;
-    --lamp: #ffd28a;
-    --glow-alpha: 0.6;
-    --car-a: #f59ec0;
-    --car-b: #8fbaf0;
-    --shade: rgba(0, 0, 0, 0.35);
-    --sky-a: #0d1226;
-    --sky-b: #171230;
-    --sky-c: #22112a;
-    --sky-d: #24160f;
-  }
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #000000;
-  --fg: #f5f5f5;
-  --muted: #a3a3a3;
-  --subtle: #d4d4d4;
-  --line: #262626;
-  --line-strong: #404040;
-  --panel: #0a0a0a;
-  --peach: #3a2a24;
-  --pink: #3a2232;
-  --lilac: #2a2545;
-  --sky: #1c2a44;
-  --mint: #1a3329;
-  --butter: #3a331c;
-  --light: #ffc56e;
-  --window-off: #22233a;
-  --face-t: #4a4d72;
-  --face-l: #34365a;
-  --face-r: #282a47;
-  --stone-t: #5a5560;
-  --stone-l: #48434e;
-  --stone-r: #3a3640;
-  --edge: rgba(0, 0, 0, 0.35);
-  --scaffold: #8a8cb8;
-  --crane: #f2a07f;
-  --flag: #f59ec0;
-  --plaque: #b8a37f;
-  --slab-top-a: #1b1c33;
-  --slab-top-b: #16262a;
-  --slab-l: #14152a;
-  --slab-r: #0f1022;
-  --road: #24253d;
-  --curb: #34365a;
-  --lane: #4b4d73;
-  --grass: #1d3a30;
-  --tree: #2f6b55;
-  --tree-hi: #3d8569;
-  --trunk: #5b4b44;
-  --lamp: #ffd28a;
-  --glow-alpha: 0.6;
-  --car-a: #f59ec0;
-  --car-b: #8fbaf0;
+/* city: night, switched on the city wrapper only */
+[data-city="night"] {
+  --window-off: #2f2f36;
+  --face-t: #4a4a52;
+  --face-l: #35353c;
+  --face-r: #28282e;
+  --stone-t: #5a5650;
+  --stone-l: #4a4640;
+  --stone-r: #3c3934;
+  --edge: rgba(0, 0, 0, 0.6);
+  --scaffold: #8c8c88;
+  --crane: #ded3b9;
+  --slab-top: #2a2a30;
+  --slab-l: #1d1d22;
+  --slab-r: #16161a;
+  --road: #34343b;
+  --curb: #45454d;
+  --lane: #5a5a63;
+  --grass: #2c332c;
+  --tree: #3f4d40;
+  --tree-hi: #556656;
+  --trunk: #5a5650;
+  --glow-alpha: 0.65;
+  --car-a: #f5b942;
+  --car-b: #ded3b9;
   --shade: rgba(0, 0, 0, 0.35);
-  --sky-a: #0d1226;
-  --sky-b: #171230;
-  --sky-c: #22112a;
-  --sky-d: #24160f;
+  --sky-top: #16161c;
+  --sky-bottom: #24232b;
 }
 
 html,
 body {
-  background: var(--bg);
-  color: var(--fg);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
 }
 
 body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* faint grid paper, as on the slides */
+  background-image:
+    linear-gradient(to right, rgba(31, 30, 31, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(31, 30, 31, 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
 }
 
 :focus-visible {
-  outline: 2px solid var(--fg);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 ::selection {
-  background: var(--lilac);
-  color: var(--fg);
+  background: var(--color-beige);
 }
 
 @layer components {
-  .heading-1 {
-    font-size: clamp(2.5rem, 6vw + 1rem, 4.25rem);
-    font-weight: 450;
-    letter-spacing: -0.01em;
-    line-height: 1;
-  }
-  .heading-2 {
-    font-size: clamp(2rem, 4vw + 1rem, 3rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  .heading-6 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    letter-spacing: 0.0125em;
-    line-height: 1.33;
-  }
-  .text-large {
-    font-size: 19px;
+  .display {
+    font-family: var(--font-serif);
     font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    font-size: clamp(3rem, 8vw + 0.5rem, 7rem);
+  }
+  .title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.02;
+    font-size: clamp(2.25rem, 4.5vw + 0.5rem, 4rem);
+  }
+  .subtitle {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 1.1;
+    font-size: clamp(1.5rem, 2vw + 0.75rem, 2.1rem);
+  }
+  .lead {
+    font-size: clamp(1.05rem, 0.6vw + 0.9rem, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-muted);
   }
   .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--color-muted);
   }
 
   .btn {
-    font-family: var(--font-mono);
-    text-transform: uppercase;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    height: 2.5rem;
-    padding: 0 0.875rem;
-    font-size: 0.875rem;
-    border-radius: 2px;
+    height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    font-size: 0.925rem;
+    font-weight: 500;
     white-space: nowrap;
-    transition: opacity 150ms, background-color 150ms, border-color 150ms;
     cursor: pointer;
+    transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), background-color 200ms, color 200ms, border-color 200ms;
+  }
+  .btn:active {
+    transform: scale(0.97);
   }
   .btn-primary {
-    background: var(--fg);
-    color: var(--bg);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
   .btn-primary:hover {
-    opacity: 0.85;
+    background: #000;
   }
   .btn-ghost {
-    border: 1px solid var(--line-strong);
-    color: var(--fg);
+    border: 1px solid var(--color-ink);
+    color: var(--color-ink);
+    background: transparent;
   }
   .btn-ghost:hover {
-    background: color-mix(in srgb, var(--fg) 6%, transparent);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
-  .icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
+  .btn-sm {
     height: 2.25rem;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    transition: border-color 150ms, color 150ms;
-    cursor: pointer;
-  }
-  .icon-btn:hover {
-    border-color: var(--line-strong);
-    color: var(--fg);
+    padding: 0 1rem;
+    font-size: 0.85rem;
   }
 
-  /* soft pastel wash behind hero sections */
-  .pastel-wash {
-    background:
-      radial-gradient(40% 55% at 15% 20%, var(--peach) 0%, transparent 70%),
-      radial-gradient(35% 50% at 40% 0%, var(--pink) 0%, transparent 70%),
-      radial-gradient(40% 55% at 70% 10%, var(--lilac) 0%, transparent 70%),
-      radial-gradient(40% 60% at 95% 35%, var(--sky) 0%, transparent 70%),
-      radial-gradient(35% 45% at 55% 60%, var(--mint) 0%, transparent 75%);
-    filter: blur(20px);
-    opacity: 0.9;
+  .card {
+    background: var(--color-card);
+    border: 1px solid var(--color-ink);
+    border-radius: 1.25rem;
   }
-
-  /* dawn sky behind the city */
-  .city-sky {
-    background: linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 40%, var(--sky-c) 75%, var(--sky-d) 100%);
+  .panel {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-radius: 1.5rem;
   }
 }
 
@@ -308,7 +203,7 @@ body {
   animation: lamp-breathe 5s ease-in-out infinite;
 }
 @keyframes lamp-breathe {
-  0%, 100% { opacity: 0.85; }
+  0%, 100% { opacity: 0.8; }
   50% { opacity: 1; }
 }
 

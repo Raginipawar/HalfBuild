@@ -94,7 +94,7 @@ function Floor({ x, y, w, d, k, tone, lit, seed }) {
           <polygon
             key={`l${i}`}
             points={poly([u0, y + d, zA], [u1, y + d, zA], [u1, y + d, zB], [u0, y + d, zB])}
-            fill={on(0, i) ? 'var(--light)' : 'var(--window-off)'}
+            fill={on(0, i) ? 'var(--window-on)' : 'var(--window-off)'}
           />
         )
       })}
@@ -106,7 +106,7 @@ function Floor({ x, y, w, d, k, tone, lit, seed }) {
           <polygon
             key={`r${i}`}
             points={poly([x + w, v0, zA], [x + w, v1, zA], [x + w, v1, zB], [x + w, v0, zB])}
-            fill={on(1, i) ? 'var(--light)' : 'var(--window-off)'}
+            fill={on(1, i) ? 'var(--window-on)' : 'var(--window-off)'}
             opacity={on(1, i) ? 0.92 : 1}
           />
         )

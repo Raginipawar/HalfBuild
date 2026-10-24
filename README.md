@@ -257,8 +257,10 @@ flowchart TB
 
 ## 08 · Design language
 
-- **Type:** system sans at weight 450 with tight tracking for headings and body, **JetBrains Mono** in uppercase for labels and buttons.
-- **Colour:** soft baby pastels (sky, lilac, pink, peach, mint) as gradients, warm window light `#FFC56E` as the single accent.
+- **Type:** **Instrument Serif** for headings with big size contrast, **Inter** for body text.
+- **Colour (from our slides):** paper `#F7F7F3` with a faint grid, ink `#1F1E1F`, grey `#CDCEC8`, beige `#DED3B9`, muted `#8C8C88`, and warm window light `#F5B942` as the single accent.
+- **Slide motifs:** pixel squares in corners, grey half circles, thin grid lines, rounded black panels, pill headings.
+- **City awake, city sleeping:** a day and night toggle on the city shows at a glance which projects are still lit.
 - **Illustration:** an isometric city drawn in plain SVG: buildings, roads, street lamps, trees, a park and little cars. No 3D library.
 - **Motion with meaning:** floors rise when parts are added, scaffolding fills in when a part is done, lights switch on at revival. `prefers-reduced-motion` is respected everywhere.
 - **Tone:** encouraging, never shaming. Abandoned projects are *paused construction*, never failures.
@@ -272,7 +274,7 @@ Live build: **24 October 2026, 12:00 to 23:59 IST.**
 
 | Time | Phase | Status |
 |---|---|:-:|
-| 12:00 | 1 · Setup: Vite, Tailwind, Router, Zustand, tokens, Navbar, menu, seed data, isometric hero city | ✅ |
+| 12:00 | 1 · Setup: Vite, Tailwind, Router, Zustand, tokens, Navbar, menu, Hello intro, seed data, isometric hero city | ✅ |
 | 13:00 | 2 · Buildings and My City, city and list views | ⏳ |
 | 15:00 | 3 · Add project with live preview, project page, timeline | |
 | 16:00 | 4 · Site Inspection, score, path, first step | |

@@ -77,10 +77,6 @@ export default function HeroCity() {
         aria-label="An isometric city of thirteen projects. Finished parts are solid lit floors, unfinished parts are dashed scaffolding, two buildings have cranes because they are being revived."
       >
         <defs>
-          <linearGradient id="slabTop" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="var(--slab-top-a)" />
-            <stop offset="1" stopColor="var(--slab-top-b)" />
-          </linearGradient>
           <radialGradient id="lampGlow">
             <stop offset="0" stopColor="var(--lamp)" stopOpacity="var(--glow-alpha)" />
             <stop offset="1" stopColor="var(--lamp)" stopOpacity="0" />
@@ -90,7 +86,7 @@ export default function HeroCity() {
         {/* floating ground slab */}
         <polygon points={poly([0, SIZE, 0], [SIZE, SIZE, 0], [SIZE, SIZE, -0.7], [0, SIZE, -0.7])} fill="var(--slab-l)" />
         <polygon points={poly([SIZE, SIZE, 0], [SIZE, 0, 0], [SIZE, 0, -0.7], [SIZE, SIZE, -0.7])} fill="var(--slab-r)" />
-        <polygon points={poly([0, 0, 0], [SIZE, 0, 0], [SIZE, SIZE, 0], [0, SIZE, 0])} fill="url(#slabTop)" />
+        <polygon points={poly([0, 0, 0], [SIZE, 0, 0], [SIZE, SIZE, 0], [0, SIZE, 0])} fill="var(--slab-top)" />
 
         {/* park and roads */}
         <Patch x={0.7} y={10.9} w={5} d={2.7} fill="var(--grass)" />
@@ -130,11 +126,11 @@ export default function HeroCity() {
 
       {tip && (
         <div
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+14px)] rounded-lg border border-line bg-bg/95 px-3 py-2 text-left shadow-sm backdrop-blur"
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+14px)] rounded-xl bg-ink px-3.5 py-2.5 text-left text-paper shadow-lg"
           style={tipPos}
         >
-          <div className="text-sm font-medium text-fg whitespace-nowrap">{tip.name}</div>
-          <div className="font-mono text-[11px] uppercase tracking-wide text-muted whitespace-nowrap">
+          <div className="font-serif text-lg leading-tight whitespace-nowrap">{tip.name}</div>
+          <div className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-white/60 whitespace-nowrap">
             {tip.solid} built · {tip.status === 'paused' || tip.status === 'reviving' ? `${tip.pending} to go · ` : ''}
             {STATUS_TEXT[tip.status]}
           </div>
