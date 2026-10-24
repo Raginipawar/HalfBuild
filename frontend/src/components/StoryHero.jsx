@@ -84,12 +84,12 @@ function Postcard({ p }) {
 
   return (
     <figure className="relative mx-auto w-full max-w-5xl">
-      <div className="relative mx-auto aspect-[734/412] max-h-[56vh] overflow-hidden rounded-[1.5rem] border border-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.35)]" style={{ maxWidth: 'calc(56vh * 734 / 412)' }}>
+      <div className="relative mx-auto aspect-[735/443] max-h-[56vh] overflow-hidden rounded-[1.5rem] border border-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.35)]" style={{ maxWidth: 'calc(56vh * 735 / 443)' }}>
         <img
-          src="/story/skyline.jpg"
-          alt="A coloured pencil drawing of a city skyline under a blue sky."
+          src="/story/city-view.jpg"
+          alt="A watercolour view over a city at sunrise: a tall tower in the centre, a long park, bridges over the river."
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ transform: `scale(${zoom})`, transformOrigin: `${15 + travel * 70}% 70%` }}
+          style={{ transform: `scale(${zoom})`, transformOrigin: `50% ${85 - travel * 60}%` }}
           draggable="false"
         />
         {/* dusk: the lights go out */}
