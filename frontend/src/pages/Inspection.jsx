@@ -50,7 +50,7 @@ export default function Inspection() {
           className="relative flex items-end justify-center overflow-hidden rounded-[1.75rem] border border-ink p-8 lg:sticky lg:top-24 lg:self-start"
           style={{ background: 'linear-gradient(180deg, var(--sky-top), var(--sky-bottom))' }}
         >
-          <BuildingView project={project} className="h-[380px] w-full" minFloors={8} />
+          <BuildingView project={project} className="h-[240px] w-full sm:h-[380px]" minFloors={8} />
           <motion.div
             className="pointer-events-none absolute inset-x-0 h-px bg-light shadow-[0_0_18px_4px_rgba(245,185,66,0.55)]"
             animate={{ bottom: `${8 + progress * 84}%` }}

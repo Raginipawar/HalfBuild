@@ -60,7 +60,7 @@ export function CityPage({ user, readOnly }) {
         </div>
       </header>
 
-      <section className="card mt-10 p-6" aria-label="Activity">
+      <section className="card mt-10 min-w-0 p-6" aria-label="Activity">
         <h2 className="mb-4 text-sm font-semibold">Activity in the last 26 weeks</h2>
         <ActivityGrid userId={user.id} />
       </section>

@@ -45,7 +45,7 @@ export default function ProjectDetail() {
         {/* Building: while reviving it is the drop zone for parts and the flag */}
         <div className="lg:sticky lg:top-24 lg:self-start">
         <BuildingPanel project={project} isOwner={isOwner}>
-          <BuildingView project={project} className="h-[440px] w-full" minFloors={8} />
+          <BuildingView project={project} className="h-[260px] w-full sm:h-[440px]" minFloors={8} />
           {project.status === 'landmark' && project.lessons && (
             <div className="mt-6 w-full rounded-xl border border-ink bg-[var(--stone-t)] p-5">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">Lessons learned</p>
@@ -129,7 +129,7 @@ export default function ProjectDetail() {
 function BuildingPanel({ project, isOwner, children }) {
   const completePart = useStore((s) => s.completePart)
   const markRebuilt = useStore((s) => s.markRebuilt)
-  const frame = 'flex flex-col items-center justify-end !rounded-[1.75rem] p-8 [background:linear-gradient(180deg,var(--sky-top),var(--sky-bottom))]'
+  const frame = 'flex flex-col items-center justify-end !rounded-[1.75rem] p-5 sm:p-8 [background:linear-gradient(180deg,var(--sky-top),var(--sky-bottom))]'
   if (isOwner && project.status === 'reviving') {
     return (
       <DropZone

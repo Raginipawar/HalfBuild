@@ -11,8 +11,8 @@ export default function ActivityGrid({ userId, compact = false }) {
   const [tip, setTip] = useState(null)
 
   return (
-    <div className={`flex flex-col gap-5 ${compact ? '' : 'lg:flex-row lg:items-end'}`}>
-      <div className="relative overflow-x-auto pb-1">
+    <div className={`flex min-w-0 max-w-full flex-col gap-5 ${compact ? '' : 'lg:flex-row lg:items-end'}`}>
+      <div className="relative min-w-0 max-w-full overflow-x-auto pb-1">
         <div className="flex gap-[3px]" role="img" aria-label={`${total} actions in the last 26 weeks, current streak ${streak} days`}>
           {columns.map((col, w) => (
             <div key={w} className="flex flex-col gap-[3px]">

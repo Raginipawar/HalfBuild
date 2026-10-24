@@ -192,7 +192,7 @@ function CommunityPreview() {
   const top = useMemo(() => rankBuilders({ users, events }).slice(0, 5), [users, events])
   return (
     <section className="mt-28">
-      <Container className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
+      <Container className="grid gap-5 lg:grid-cols-[1.4fr_1fr] [&>*]:min-w-0">
         <Reveal className="card p-7">
           <p className="eyebrow">Activity grid</p>
           <h3 className="subtitle mt-2">Revival work, counted day by day.</h3>

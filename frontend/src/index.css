@@ -394,9 +394,10 @@ body {
 
 /* frosted glass header */
 .glass-bar {
-  background: color-mix(in srgb, var(--color-paper) 38%, transparent);
-  backdrop-filter: blur(18px) saturate(1.6);
-  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  /* frosted enough that text scrolling underneath never clashes with the logo */
+  background: color-mix(in srgb, var(--color-paper) 78%, transparent);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
   border-bottom: 1px solid rgba(255, 255, 255, 0.45);
   box-shadow: 0 1px 0 rgba(31, 30, 31, 0.06), 0 8px 32px -12px rgba(31, 30, 31, 0.12);
 }

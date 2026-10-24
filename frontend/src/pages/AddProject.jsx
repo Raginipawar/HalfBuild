@@ -133,7 +133,7 @@ export default function AddProject() {
           <DropZone accepts={['blueprint']} onDrop={() => submit()} title="Empty plot" className="!rounded-[1.75rem]">
           <div className="flex flex-col items-center p-8">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">Empty plot · drop the blueprint here</p>
-            <BuildingView project={preview} className="h-[380px] w-full" minFloors={8} />
+            <BuildingView project={preview} className="h-[240px] w-full sm:h-[380px]" minFloors={8} />
             <p className="mt-4 font-display text-xl font-semibold tracking-tight">{preview.name}</p>
             <p className="text-sm text-muted">
               {form.completedParts.length} solid {form.completedParts.length === 1 ? 'floor' : 'floors'} · {form.pendingParts.length} under scaffolding
