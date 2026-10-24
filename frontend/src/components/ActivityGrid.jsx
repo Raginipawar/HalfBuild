@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useStore } from '../store/useStore'
 import { activityGrid, formatDay } from '../logic/activity'
 
-const COLORS = ['#e9e9e3', '#ded3b9', '#b9ad8f', '#6b675f', '#1f1e1f']
+const COLORS = [0, 1, 2, 3, 4].map((i) => `var(--grid-${i})`)
 
 // GitHub style grid of the last 26 weeks of revival activity.
 export default function ActivityGrid({ userId, compact = false }) {

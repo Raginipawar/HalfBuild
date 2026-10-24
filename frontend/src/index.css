@@ -392,6 +392,14 @@ body {
   50% { opacity: 0.35; }
 }
 
+/* activity grid levels, light and dark */
+:root {
+  --grid-0: #e9e9e3; --grid-1: #ded3b9; --grid-2: #b9ad8f; --grid-3: #6b675f; --grid-4: #1f1e1f;
+}
+:root[data-theme="dark"] {
+  --grid-0: #26262b; --grid-1: #4f4838; --grid-2: #7d6e4c; --grid-3: #bfa874; --grid-4: #f5b942;
+}
+
 /* frosted glass header */
 .glass-bar {
   /* frosted enough that text scrolling underneath never clashes with the logo */

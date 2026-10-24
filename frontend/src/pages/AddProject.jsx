@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { ChipsInput, Field } from '../components/ui'
 import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
@@ -21,7 +21,8 @@ export default function AddProject() {
     tools: [], repo: '', demo: '',
   })
   const [error, setError] = useState('')
-  const [mode, setMode] = useState('manual')
+  const [params] = useSearchParams()
+  const [mode, setMode] = useState(params.get('from') === 'github' ? 'github' : 'manual')
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
   const preview = {

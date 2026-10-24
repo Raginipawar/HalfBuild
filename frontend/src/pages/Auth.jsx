@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useStore } from '../store/useStore'
+import { useStore, useCurrentUser } from '../store/useStore'
 import { ChipsInput, Field } from '../components/ui'
 import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
 import Logo from '../components/Logo'
@@ -34,14 +34,52 @@ function PassAndGate({ name, line, onEnter, busy, gateTitle }) {
   )
 }
 
+// Shown on Log in and Sign up when someone is already signed in.
+function AlreadySignedIn({ user }) {
+  const logout = useStore((s) => s.logout)
+  return (
+    <div className="card p-6">
+      <div className="flex items-center gap-4">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-ink text-lg font-semibold text-paper">
+          {user.name.split(' ').map((p) => p[0]).join('').slice(0, 2).toUpperCase()}
+        </span>
+        <div>
+          <p className="text-sm text-muted">You are signed in as</p>
+          <p className="text-lg font-semibold">{user.name} <span className="font-normal text-muted">@{user.username}</span></p>
+          <p className="text-sm text-muted">{user.email}</p>
+        </div>
+      </div>
+      <div className="mt-5 flex flex-wrap gap-3">
+        <Link to="/city" className="btn btn-primary">Go to my city</Link>
+        <Link to="/project/new" className="btn btn-ghost">Add a project</Link>
+      </div>
+      <p className="mt-5 text-sm font-medium">Not you? Drop your pass at the exit gate to switch accounts.</p>
+      <div className="mt-2 grid gap-3 sm:grid-cols-2">
+        <DragCard type="pass" data="switch" label="Your builder pass">
+          <div className="flex items-center gap-3">
+            <Logo size={24} />
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Builder pass</p>
+              <p className="truncate text-sm font-semibold">{user.name}</p>
+            </div>
+          </div>
+        </DragCard>
+        <DropZone accepts={['pass']} onDrop={() => logout()} title="Exit gate" hint="Drop to log out" />
+      </div>
+    </div>
+  )
+}
+
 function AuthShell({ title, sub, children }) {
+  const user = useCurrentUser()
   return (
     <main className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-8 lg:grid-cols-2 lg:py-20">
       <div>
         <PixelSquares />
         <h1 className="title mt-6">{title}</h1>
-        <p className="lead mt-3">{sub}</p>
-        <div className="mt-8">{children}</div>
+        <p className="lead mt-3">{user ? 'Your city is open. Pick up where you left off.' : sub}</p>
+        <div className="mt-8">{user ? <AlreadySignedIn user={user} /> : children}</div>
+        {!user && <p className="mt-6 text-xs text-muted">Accounts and projects are saved in this browser only, so sign in on the same browser you signed up on.</p>}
       </div>
       <div className="panel relative hidden min-h-[620px] overflow-hidden lg:block">
         <Suspense fallback={null}>

@@ -160,7 +160,16 @@ function EmptyCity({ readOnly }) {
         <path d="M70 46 100 33 130 46 100 58Z" fill="none" stroke="var(--color-soft)" strokeDasharray="4 3" />
       </svg>
       <h2 className="subtitle mt-6">{readOnly ? 'This city has no buildings yet.' : 'Your city is waiting for its first building.'}</h2>
-      {!readOnly && <Link to="/project/new" className="btn btn-primary mt-6"><Plus size={16} /> Add a project</Link>}
+      {!readOnly && (
+        <>
+          <p className="mt-2 max-w-md text-sm text-muted">Add the project you think about most. Fill it in by hand, or import it straight from your GitHub.</p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link to="/project/new" className="btn btn-primary"><Plus size={16} /> Add a project</Link>
+            <Link to="/project/new?from=github" className="btn btn-ghost">Import from GitHub</Link>
+            <Link to="/city-tour" className="btn btn-ghost">See the demo city</Link>
+          </div>
+        </>
+      )}
     </section>
   )
 }

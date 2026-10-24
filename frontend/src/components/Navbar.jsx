@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Moon, Sun } from 'lucide-react'
 import Logo from './Logo'
+import { Avatar } from './ui'
 import { setTheme, useTheme } from '../lib/theme'
 import MenuOverlay from './MenuOverlay'
 import { useCurrentUser } from '../store/useStore'
@@ -34,9 +35,14 @@ export default function Navbar() {
             >
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            <Link to={user ? '/city' : '/signup'} className="btn btn-primary btn-sm hidden sm:inline-flex">
-              {user ? 'My city' : 'Build my city'}
-            </Link>
+            {user ? (
+              <Link to="/city" className="flex items-center gap-2 rounded-full border border-line py-1 pl-1 pr-3 text-sm font-medium transition-colors hover:border-ink" title={`Signed in as ${user.name}`}>
+                <Avatar name={user.name} size={28} />
+                <span className="hidden sm:inline">{user.name.split(' ')[0]}</span>
+              </Link>
+            ) : (
+              <Link to="/signup" className="btn btn-primary btn-sm hidden sm:inline-flex">Build my city</Link>
+            )}
             <button
               ref={buttonRef}
               type="button"
