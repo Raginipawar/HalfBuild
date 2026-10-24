@@ -35,7 +35,7 @@ export default function App() {
       {intro && <HelloIntro onDone={() => setIntro(false)} />}
       <ScrollToTop />
       <Navbar />
-      <div className="flex-1">
+      <div className="flex-1 pt-16">
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<About />} />

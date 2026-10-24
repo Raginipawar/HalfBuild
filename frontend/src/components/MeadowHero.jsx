@@ -16,7 +16,7 @@ export default function MeadowHero() {
   const rise = (i) => (reduce ? {} : { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.15 + i * 0.12, duration: 0.8, ease: [0.22, 1, 0.36, 1] } })
 
   return (
-    <section className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-hidden">
+    <section className="relative -mt-16 flex min-h-screen flex-col overflow-hidden pt-16">
       <img src="/sky/dawn.png" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-paper" aria-hidden />
       <div className="absolute inset-0 hidden bg-[#0f1430]/55 dark:block" aria-hidden />

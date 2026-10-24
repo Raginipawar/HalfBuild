@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b border-line bg-paper/85 backdrop-blur-md">
+      <header className="glass-bar fixed inset-x-0 top-0 z-30">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-8">
           <Link to="/" className="flex items-center gap-2.5" aria-label="HALFBUILT home">
             <Logo />
