@@ -59,6 +59,22 @@ export const useStore = create(
           return { ok: true }
         },
 
+        // a city deed from logic/keepsakes.js: replaces any copy of that builder in this browser
+        importCity({ user, projects, events }) {
+          const state = get()
+          const gone = new Set(state.users
+            .filter((u) => u.id === user.id || u.email === user.email || u.username === user.username)
+            .map((u) => u.id))
+          const projectIds = new Set(projects.map((p) => p.id))
+          const eventIds = new Set(events.map((e) => e.id))
+          set({
+            users: [...state.users.filter((u) => !gone.has(u.id)), user],
+            projects: [...state.projects.filter((p) => !gone.has(p.ownerId) && !projectIds.has(p.id)), ...projects],
+            events: [...events, ...state.events.filter((e) => !gone.has(e.userId) && !eventIds.has(e.id))],
+            currentUserId: user.id,
+          })
+        },
+
         logout() {
           set({ currentUserId: null })
         },

@@ -9,6 +9,8 @@ import { Avatar, Stat } from '../components/ui'
 import { REASONS, STATUS, daysSince } from '../logic/buildingState'
 import NotFound from './NotFound'
 import { useCityNight } from '../lib/theme'
+import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
+import { exportDeed } from '../logic/keepsakes'
 
 // My City (owner view) and the public profile (read only) share this page.
 export function CityPage({ user, readOnly }) {
@@ -30,9 +32,10 @@ export function CityPage({ user, readOnly }) {
   }
 
   // revisit prompt: the paused project with the oldest lastTouchedOn that was never inspected
-  const revisit = !readOnly && projects
-    .filter((p) => p.status === 'paused' && !p.inspection)
-    .sort((a, b) => a.lastTouchedOn.localeCompare(b.lastTouchedOn))[0]
+  const oldestFirst = (a, b) => a.lastTouchedOn.localeCompare(b.lastTouchedOn)
+  const revisit = !readOnly && projects.filter((p) => p.status === 'paused' && !p.inspection).sort(oldestFirst)[0]
+  // otherwise nudge the reviving building whose scaffolding has waited longest
+  const stalled = !readOnly && !revisit && projects.filter((p) => p.status === 'reviving' && p.pendingParts.length).sort(oldestFirst)[0]
 
   const filtered = projects.filter((p) =>
     (status === 'all' || p.status === status) &&
@@ -75,6 +78,19 @@ export function CityPage({ user, readOnly }) {
             </p>
           </div>
           <Link to={`/project/${revisit.id}/inspect`} className="btn bg-paper text-ink hover:bg-light">Start Site Inspection</Link>
+        </section>
+      )}
+
+      {stalled && (
+        <section className="panel mt-6 flex flex-wrap items-center justify-between gap-4 p-6">
+          <div>
+            <p className="text-xs uppercase tracking-[0.18em] text-white/50">One floor today?</p>
+            <p className="mt-1 font-display text-2xl font-semibold tracking-tight">{stalled.name}</p>
+            <p className="text-sm text-white/65">
+              {daysSince(stalled.lastTouchedOn) ? `Quiet for ${daysSince(stalled.lastTouchedOn)} days. ` : ''}Next up: {stalled.pendingParts[0]}. {stalled.pendingParts.length} {stalled.pendingParts.length === 1 ? 'floor' : 'floors'} of scaffolding left.
+            </p>
+          </div>
+          <Link to={`/project/${stalled.id}`} className="btn bg-paper text-ink hover:bg-light">Go to the building</Link>
         </section>
       )}
 
@@ -148,7 +164,38 @@ export function CityPage({ user, readOnly }) {
           )}
         </>
       )}
+
+      {!readOnly && <CityDeed userId={user.id} />}
     </main>
+  )
+}
+
+// Canvas Protocol: drop the deed on the vault to save your whole city as a file
+function CityDeed({ userId }) {
+  const [saved, setSaved] = useState(false)
+  const save = () => {
+    exportDeed(useStore.getState(), userId)
+    setSaved(true)
+  }
+  return (
+    <section className="card mt-10 grid min-w-0 gap-4 p-6 md:grid-cols-[1fr_1fr] md:items-center" aria-label="Take your city with you">
+      <div className="min-w-0">
+        <h2 className="text-sm font-semibold">Take your city with you</h2>
+        <p className="mt-1 text-sm text-muted">
+          Your city lives in this browser. Save the deed, then drop it on the log in page of any other device to move in there.
+        </p>
+        <div className="mt-4 max-w-sm">
+          <DragCard type="deed" data={userId} label="City deed">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">City deed</p>
+            <p className="text-sm font-semibold">Your account and every building</p>
+          </DragCard>
+        </div>
+      </div>
+      <div className="space-y-2">
+        <DropZone accepts={['deed']} onDrop={save} title={saved ? 'Deed saved. Drop again for a fresh copy' : 'Vault · save to this device'} hint="Drop the deed here to download it" className="min-h-[120px]" />
+        <CanvasHint>Drag the deed into the vault.</CanvasHint>
+      </div>
+    </section>
   )
 }
 

@@ -5,12 +5,48 @@ import { ChipsInput, Field } from '../components/ui'
 import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
 import Logo from '../components/Logo'
 import { PixelSquares } from '../components/Decor'
+import { readDeed } from '../logic/keepsakes'
 // the 3D lanyard pulls in three.js, so it only loads on these two pages
 const Lanyard = lazy(() => import('../components/Lanyard/Lanyard'))
 
 // Sign up and Log in share one layout: form on the left, a building on the right.
 // DEMO AUTHENTICATION ONLY: everything stays in this browser.
 
+
+// Moving from another browser: drop the city deed file saved from My City.
+function DeedDrop({ onDone }) {
+  const importCity = useStore((s) => s.importCity)
+  const [over, setOver] = useState(false)
+  const [error, setError] = useState('')
+
+  const take = async (file) => {
+    if (!file) return
+    const res = await readDeed(file)
+    if (!res.ok) return setError(res.error)
+    importCity(res.deed)
+    onDone()
+  }
+
+  return (
+    <div
+      onDragOver={(e) => { e.preventDefault(); setOver(true) }}
+      onDragLeave={() => setOver(false)}
+      onDrop={(e) => { e.preventDefault(); setOver(false); take(e.dataTransfer.files[0]) }}
+      className={`rounded-2xl border-2 border-dashed p-5 text-center transition-all duration-200 ${over ? 'scale-[1.02] border-light bg-light/20' : 'border-soft'}`}
+    >
+      <p className="text-sm font-semibold">{over ? 'Let go to move in' : 'Moving from another device?'}</p>
+      <p className="mt-1 text-xs text-muted">
+        Drop your city deed file here, or{' '}
+        <label className="cursor-pointer font-medium text-ink underline underline-offset-4">
+          choose it
+          <input type="file" accept="application/json,.json" className="sr-only" onChange={(e) => take(e.target.files[0])} />
+        </label>
+        . Save the deed from My City on the device you signed up on.
+      </p>
+      {error && <p className="mt-2 text-xs font-medium text-[#a1361f]" role="alert">{error}</p>}
+    </div>
+  )
+}
 
 // Canvas Protocol: you enter by dropping your builder pass on the site gate.
 function PassAndGate({ name, line, onEnter, busy, gateTitle }) {
@@ -139,6 +175,7 @@ export function Login() {
         <p className="text-center text-sm text-muted">
           New here? <Link to="/signup" className="font-medium text-ink underline underline-offset-4">Build your city</Link>
         </p>
+        <DeedDrop onDone={() => navigate('/city', { replace: true })} />
       </form>
     </AuthShell>
   )

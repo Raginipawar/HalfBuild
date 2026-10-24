@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { Check, ExternalLink, Flag, Github } from 'lucide-react'
@@ -7,10 +7,11 @@ import BuildingView from '../iso/BuildingView'
 import PathChooser from '../components/PathChooser'
 import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
 import { Avatar, Chip, ChipsInput, ScoreRing, StatusBadge } from '../components/ui'
-import { REASONS } from '../logic/buildingState'
+import { REASONS, STATUS } from '../logic/buildingState'
 import { CONFIG, completionOf } from '../logic/revivalScore'
 import { formatDay } from '../logic/activity'
 import NotFound from './NotFound'
+import { saveBuildingPostcard } from '../logic/keepsakes'
 
 const EVENT_TEXT = {
   created: 'Construction started',
@@ -43,7 +44,7 @@ export default function ProjectDetail() {
 
       <div className="mt-6 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         {/* Building: while reviving it is the drop zone for parts and the flag */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <div className="lg:sticky lg:top-24 lg:self-start" data-postcard-frame>
         <BuildingPanel project={project} isOwner={isOwner}>
           <BuildingView project={project} className="h-[260px] w-full sm:h-[440px]" minFloors={8} />
           {project.status === 'landmark' && project.lessons && (
@@ -53,6 +54,7 @@ export default function ProjectDetail() {
             </div>
           )}
         </BuildingPanel>
+        <Postcard project={project} />
         </div>
 
         {/* Story and actions */}
@@ -123,6 +125,39 @@ export default function ProjectDetail() {
         </div>
       </div>
     </main>
+  )
+}
+
+// Canvas Protocol: drop the postcard in the post box to save the building as an image
+function Postcard({ project }) {
+  const ref = useRef(null)
+  const [state, setState] = useState('idle')
+  const post = async () => {
+    const svg = ref.current?.closest('[data-postcard-frame]')?.querySelector('figure svg')
+    if (!svg) return
+    setState('busy')
+    try {
+      const n = project.completedParts.length
+      await saveBuildingPostcard(svg, {
+        name: project.name,
+        status: STATUS[project.status].label,
+        score: project.inspection?.score ?? null,
+        floors: `${n} ${n === 1 ? 'floor' : 'floors'} built · ${project.pendingParts.length} still scaffolding`,
+      })
+      setState('done')
+    } catch {
+      setState('error')
+    }
+  }
+  const title = { idle: 'Post box · save as image', busy: 'Painting your postcard', done: 'Postcard saved. Share it anywhere', error: 'That did not work. Try again' }[state]
+  return (
+    <div ref={ref} className="mt-4 grid gap-3 sm:grid-cols-2">
+      <DragCard type="postcard" data={project.id} label="Postcard of this building">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Postcard</p>
+        <p className="truncate text-sm font-semibold">{project.name}</p>
+      </DragCard>
+      <DropZone accepts={['postcard']} onDrop={post} title={title} hint="Drop the postcard to download a picture" />
+    </div>
   )
 }
 
