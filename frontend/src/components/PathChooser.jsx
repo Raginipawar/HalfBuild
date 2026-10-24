@@ -48,7 +48,7 @@ export default function PathChooser({ project, recommended, onApplied, startOpen
                 <span className="text-sm font-semibold uppercase tracking-[0.12em]">{p.label}</span>
                 {key === recommended && <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${active ? 'bg-light text-ink' : 'bg-beige'}`}>Recommended</span>}
               </span>
-              <span className={`mt-1.5 block text-sm ${active ? 'text-white/70' : 'text-muted'}`}>{p.blurb}</span>
+              <span className={`mt-1.5 block text-sm ${active ? 'text-paper/70' : 'text-muted'}`}>{p.blurb}</span>
             </button>
           )
         })}

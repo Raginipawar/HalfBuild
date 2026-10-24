@@ -9,12 +9,12 @@ const COLUMNS = [
 
 export default function Footer() {
   return (
-    <footer className="mt-24 bg-ink text-paper">
+    <footer className="on-night mt-24">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-8 md:grid-cols-[1.4fr_repeat(3,1fr)]">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="rounded bg-paper p-1"><Logo size={22} /></span>
-            <span className="font-display text-2xl tracking-[0.12em]">HALFBUILT</span>
+            <Logo size={26} dark />
+            <span className="font-display text-[19px] tracking-[0.14em]"><b>HALF</b><span className="text-white/50">BUILT</span></span>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
             Unfinished does not mean failed. It means the next floor has not been built yet.

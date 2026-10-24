@@ -36,7 +36,7 @@ export default function HowItWorks() {
           {JOURNEY.map(([title, text], i) => (
             <motion.li
               key={title}
-              className={`relative rounded-[1.25rem] border border-ink p-6 ${[2, 4, 5].includes(i) ? 'bg-ink text-paper' : 'bg-card'}`}
+              className={`relative rounded-[1.25rem] border border-ink p-6 ${[2, 4, 5].includes(i) ? 'on-night' : 'bg-card'}`}
               initial={reduce ? false : { opacity: 0, y: 30, scale: 0.96 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
@@ -67,7 +67,7 @@ export default function HowItWorks() {
           {PATH_ORDER.map((key, i) => {
             const p = CONFIG.paths[key]
             return (
-              <Reveal key={key} delay={i * 0.05} className={`grid gap-4 rounded-[1.25rem] border border-ink p-6 md:grid-cols-[0.6fr_1.2fr_1fr] md:items-center ${i === 0 ? 'bg-ink text-paper' : 'bg-card'}`}>
+              <Reveal key={key} delay={i * 0.05} className={`grid gap-4 rounded-[1.25rem] border border-ink p-6 md:grid-cols-[0.6fr_1.2fr_1fr] md:items-center ${i === 0 ? 'on-night' : 'bg-card'}`}>
                 <p className="font-display text-2xl font-semibold uppercase tracking-tight">{p.label}</p>
                 <p className={i === 0 ? 'text-white/75' : 'text-muted'}>{p.blurb}</p>
                 <p className={`text-sm ${i === 0 ? 'text-white/60' : 'text-muted'}`}><b className={i === 0 ? 'text-paper' : 'text-ink'}>Example:</b> {p.example}</p>

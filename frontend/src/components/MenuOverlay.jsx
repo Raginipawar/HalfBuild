@@ -50,7 +50,7 @@ export default function MenuOverlay({ open, onClose }) {
     reduce
       ? { initial: { opacity: 0 }, animate: { opacity: 1 } }
       : {
-          initial: { opacity: 0, y: 40 },
+          initial: { opacity: 0, y: 16 },
           animate: { opacity: 1, y: 0 },
           transition: { delay: 0.1 + i * 0.05, type: 'spring', stiffness: 260, damping: 22 },
         }
@@ -63,7 +63,7 @@ export default function MenuOverlay({ open, onClose }) {
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
-          className="fixed inset-0 z-50 overflow-y-auto bg-ink text-paper"
+          className="on-night fixed inset-0 z-50 overflow-y-auto"
           initial={reduce ? { opacity: 0 } : { clipPath: 'circle(0% at calc(100% - 60px) 32px)' }}
           animate={reduce ? { opacity: 1 } : { clipPath: 'circle(150% at calc(100% - 60px) 32px)' }}
           exit={reduce ? { opacity: 0 } : { clipPath: 'circle(0% at calc(100% - 60px) 32px)' }}
@@ -71,7 +71,7 @@ export default function MenuOverlay({ open, onClose }) {
         >
           <div className="mx-auto flex min-h-full max-w-7xl flex-col px-4 sm:px-8">
             <div className="flex h-16 items-center justify-between border-b border-white/15">
-              <span className="font-display text-2xl tracking-[0.12em]">HALFBUILT</span>
+              <span className="font-display text-[19px] tracking-[0.14em]"><b>HALF</b><span className="text-white/50">BUILT</span></span>
               <button
                 type="button"
                 onClick={onClose}
@@ -81,17 +81,17 @@ export default function MenuOverlay({ open, onClose }) {
               </button>
             </div>
 
-            <nav className="flex-1 py-6 sm:py-10" aria-label="Main">
+            <nav className="flex-1 py-6 sm:py-8" aria-label="Main">
               <ul>
                 {links.map((l, i) => (
                   <motion.li key={l.label} {...item(i)} className="border-b border-white/15">
-                    <Link to={l.to} onClick={onClose} className="group flex items-baseline gap-4 py-3 sm:gap-8 sm:py-4">
+                    <Link to={l.to} onClick={onClose} className="group flex items-center gap-4 py-3 sm:gap-6 sm:py-3.5">
                       <span className="w-8 text-xs text-white/50">0{i + 1}</span>
-                      <span className="flex-1 font-display text-[clamp(2.25rem,6vw,4.5rem)] leading-none transition-[transform,color] duration-300 group-hover:translate-x-3 group-hover:text-light">
+                      <span className="flex-1 font-display text-[clamp(1.5rem,2.6vw,2.25rem)] font-semibold leading-tight tracking-tight transition-[transform,color] duration-300 group-hover:translate-x-2 group-hover:text-light">
                         {l.label}
                       </span>
                       <span className="hidden text-sm text-white/55 md:block">{l.hint}</span>
-                      <ArrowUpRight size={22} className="self-center text-white/40 transition-colors group-hover:text-light" />
+                      <ArrowUpRight size={18} className="text-white/40 transition-colors group-hover:text-light" />
                     </Link>
                   </motion.li>
                 ))}

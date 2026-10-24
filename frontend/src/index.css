@@ -22,6 +22,39 @@
   --color-light: #f5b942;
   --color-line: #e4e4de;
   --color-card: #ffffff;
+  --color-night: #1f1e1f;   /* always dark surface: panels, menu, footer, tooltips */
+}
+
+/* Dark mode for the whole site: swap the tokens, components stay the same */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #0f0f11;
+  --color-ink: #f2f2ee;
+  --color-grey: #3a3a40;
+  --color-beige: #6b6150;
+  --color-muted: #a6a6a0;
+  --color-soft: #85857f;
+  --color-line: #26262b;
+  --color-card: #17171a;
+  --color-night: #1d1d21;
+}
+
+/* Inside an always dark surface keep the light palette, so "text-paper" stays light */
+.panel,
+.on-night {
+  --color-paper: #f7f7f3;
+  --color-ink: #1f1e1f;
+  --color-grey: #cdcec8;
+  --color-beige: #ded3b9;
+  --color-card: #ffffff;
+  background-color: var(--color-night);
+  color: #fff;
+}
+:root[data-theme="dark"] .panel,
+:root[data-theme="dark"] .on-night {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 :root {
@@ -105,6 +138,11 @@ body {
     linear-gradient(to bottom, rgba(31, 30, 31, 0.045) 1px, transparent 1px);
   background-size: 44px 44px;
 }
+:root[data-theme="dark"] body {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+}
 
 :focus-visible {
   outline: 2px solid var(--color-ink);
@@ -173,7 +211,7 @@ body {
     color: var(--color-paper);
   }
   .btn-primary:hover {
-    background: #000;
+    opacity: 0.88;
   }
   .btn-ghost {
     border: 1px solid var(--color-ink);
@@ -192,7 +230,8 @@ body {
 
   .field {
     width: 100%;
-    background: #fff;
+    background: var(--color-card);
+    color: var(--color-ink);
     border: 1px solid var(--color-grey);
     border-radius: 0.9rem;
     transition: border-color 150ms, box-shadow 150ms;
@@ -203,7 +242,7 @@ body {
   .field:focus-within,
   .field:focus {
     border-color: var(--color-ink);
-    box-shadow: 0 0 0 3px rgba(31, 30, 31, 0.08);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-ink) 10%, transparent);
     outline: none;
   }
   input.field,
@@ -219,10 +258,16 @@ body {
     border-radius: 1.25rem;
   }
   .panel {
-    background: var(--color-ink);
-    color: var(--color-paper);
     border-radius: 1.5rem;
   }
+}
+
+.crane-swing {
+  animation: crane-swing 6s ease-in-out infinite;
+}
+@keyframes crane-swing {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
 }
 
 .lamp-glow {

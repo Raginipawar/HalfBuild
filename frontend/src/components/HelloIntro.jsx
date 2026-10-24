@@ -28,7 +28,7 @@ export default function HelloIntro({ onDone }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-ink text-paper"
+      className="on-night fixed inset-0 z-[60] flex items-center justify-center"
       initial={{ y: 0 }}
       animate={{ y: leaving ? '-100%' : 0 }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}

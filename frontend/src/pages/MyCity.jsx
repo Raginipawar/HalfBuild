@@ -8,6 +8,7 @@ import ProjectCard from '../components/ProjectCard'
 import { Avatar, Stat } from '../components/ui'
 import { REASONS, STATUS, daysSince } from '../logic/buildingState'
 import NotFound from './NotFound'
+import { useCityNight } from '../lib/theme'
 
 // My City (owner view) and the public profile (read only) share this page.
 export function CityPage({ user, readOnly }) {
@@ -15,7 +16,7 @@ export function CityPage({ user, readOnly }) {
   const events = useStore((s) => s.events)
   const projects = useMemo(() => allProjects.filter((p) => p.ownerId === user.id), [allProjects, user.id])
   const [view, setView] = useState('city')
-  const [night, setNight] = useState(false)
+  const [night, setNight] = useCityNight()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
   const [reason, setReason] = useState('all')
