@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Pause, Play, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import City from '../iso/City'
 import { Avatar, Reveal } from '../components/ui'
@@ -20,20 +20,10 @@ function DemoCity() {
   const users = useStore((s) => s.users)
   const [q, setQ] = useState('')
   const [owner, setOwner] = useState(null)
-  const [months, setMonths] = useState(0)
-  const [playing, setPlaying] = useState(false)
-  const extraDays = Math.round(months * 30.4)
-  const stillLit = projects.filter((p) => litRatio(p, extraDays) > 0).length
+  const stillLit = projects.filter((p) => litRatio(p) > 0).length
   const matches = q.trim() ? users.filter((u) => `${u.name} ${u.username}`.toLowerCase().includes(q.toLowerCase())).slice(0, 5) : []
   const picked = users.find((u) => u.id === owner)
 
-  // play: move the dial forward one month at a time, then stop at a year
-  useEffect(() => {
-    if (!playing) return
-    if (months >= 12) { setPlaying(false); return }
-    const t = setTimeout(() => setMonths((m) => Math.min(12, m + 1)), 550)
-    return () => clearTimeout(t)
-  }, [playing, months])
 
   const glass = 'glass-bar rounded-2xl border border-white/50'
 
@@ -49,7 +39,7 @@ function DemoCity() {
         <Reveal className="text-center">
           <p className="eyebrow">The demo city</p>
           <h2 className="title mx-auto mt-3 max-w-3xl">Six builders. One city. Find yourself in it.</h2>
-          <p className="lead mx-auto mt-3 max-w-2xl">Search a builder to light up their buildings, or press play to fast forward a year and watch untouched projects go dark.</p>
+          <p className="lead mx-auto mt-3 max-w-2xl">Search a builder to light up their buildings. Hover a building to read it, click to open it.</p>
         </Reveal>
 
         {/* top panels */}
@@ -91,32 +81,9 @@ function DemoCity() {
 
         {/* the city itself, storybook style, no box */}
         <div data-city="day" className="city-sketch relative -mt-2">
-          <City projects={projects} users={users} highlightOwner={owner} minWidth={760} extraDays={extraDays} />
+          <City projects={projects} users={users} highlightOwner={owner} minWidth={760} />
         </div>
 
-        {/* time machine */}
-        <div className={`relative z-10 mx-auto -mt-4 flex max-w-3xl flex-wrap items-center gap-4 p-4 ${glass}`}>
-          <button
-            type="button"
-            onClick={() => { if (months >= 12) setMonths(0); setPlaying(!playing) }}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink text-paper"
-            aria-label={playing ? 'Pause time' : 'Play time forward'}
-          >
-            {playing ? <Pause size={16} /> : <Play size={16} />}
-          </button>
-          <div className="min-w-[200px] flex-1">
-            <label htmlFor="time-dial" className="flex justify-between text-xs font-medium uppercase tracking-[0.14em]">
-              <span>Time machine</span>
-              <span>{months === 0 ? 'Today' : `${months} ${months === 1 ? 'month' : 'months'} from now`}</span>
-            </label>
-            <input id="time-dial" type="range" min={0} max={12} step={1} value={months}
-              onChange={(e) => { setPlaying(false); setMonths(Number(e.target.value)) }}
-              className="mt-1 w-full accent-[var(--color-light)]" />
-          </div>
-          <p className="text-sm text-muted">
-            {months > 0 ? 'Only revived projects keep their lights on.' : 'Hover a building to read it, click to open it.'}
-          </p>
-        </div>
       </div>
     </section>
   )
