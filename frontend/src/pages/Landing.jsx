@@ -14,6 +14,7 @@ import { rankBuilders } from '../logic/leaderboard'
 import { litRatio } from '../logic/buildingState'
 import { useCityNight } from '../lib/theme'
 import StoryHero from '../components/StoryHero'
+import MeadowHero from '../components/MeadowHero'
 
 const recent = new Date().toISOString()
 const SAMPLE_PAUSED = { name: 'Paused', completedParts: ['a', 'b', 'c'], pendingParts: ['d', 'e'], status: 'paused', reason: 'time', lastTouchedOn: '2026-03-01T00:00:00Z' }
@@ -22,6 +23,7 @@ const SAMPLE_REVIVING = { name: 'Reviving', completedParts: ['a', 'b', 'c', 'd']
 export default function Landing() {
   return (
     <main>
+      <MeadowHero />
       <StoryHero />
       <ProblemStrip />
       <HowItWorks />

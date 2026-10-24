@@ -29,8 +29,8 @@ export default function StoryHero() {
   const idx = CHAPTERS.indexOf(chapter)
 
   return (
-    <section ref={ref} className={reduce ? 'relative' : 'relative h-[500vh]'} aria-label="The HALFBUILT story">
-      <div className={`${reduce ? '' : 'sticky top-16'} mx-auto grid h-[calc(100vh-4rem)] min-h-[600px] max-w-7xl items-center gap-8 px-4 py-6 sm:px-8 lg:grid-cols-[1fr_auto] lg:gap-16`}>
+    <section ref={ref} id="story" className={reduce ? 'relative' : 'relative h-[500vh]'} aria-label="The HALFBUILT story">
+      <div className={`${reduce ? '' : 'sticky top-16'} mx-auto flex h-[calc(100vh-4rem)] min-h-[600px] max-w-7xl flex-col items-center justify-center gap-8 px-4 py-6 sm:px-8`}>
         <Captions chapter={chapter} idx={idx} />
         <Postcard p={p} />
         <ol className="absolute right-3 top-1/2 hidden -translate-y-1/2 flex-col gap-3 xl:flex" aria-hidden>
@@ -51,7 +51,7 @@ export default function StoryHero() {
 function Captions({ chapter, idx }) {
   const user = useCurrentUser()
   return (
-    <div className="order-2 text-center lg:order-1 lg:text-left">
+    <div className="text-center">
       <p className="eyebrow">Chapter {idx + 1} of {CHAPTERS.length} · The city story</p>
       <AnimatePresence mode="wait">
         <motion.div
@@ -61,10 +61,10 @@ function Captions({ chapter, idx }) {
           exit={{ opacity: 0, y: -24, filter: 'blur(6px)' }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1 className={`${chapter.final ? 'display' : 'title'} mt-4 max-w-3xl`}>{chapter.title}</h1>
-          <p className="lead mx-auto mt-4 max-w-xl lg:mx-0">{chapter.sub}</p>
+          <h2 className="title mx-auto mt-4 max-w-4xl">{chapter.title}</h2>
+          <p className="lead mx-auto mt-3 max-w-xl">{chapter.sub}</p>
           {chapter.final && (
-            <div className="mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Link to={user ? '/city' : '/signup'} className="btn btn-primary">Build my city <ArrowRight size={16} /></Link>
               <a href="#demo-city" className="btn btn-ghost">See a demo city</a>
             </div>
@@ -76,20 +76,20 @@ function Captions({ chapter, idx }) {
 }
 
 function Postcard({ p }) {
-  const travel = clamp(p / 0.6) // walk up the street
+  const travel = clamp(p / 0.6) // pan across the skyline
   const zoom = 1.55 - 0.55 * clamp((p - 0.6) / 0.25) // zoom out at the end
   const dusk = clamp((p - 0.38) / 0.15) * (1 - clamp((p - 0.8) / 0.12))
   const glow = clamp((p - 0.8) / 0.12)
   const label = clamp((p - 0.58) / 0.06) * (1 - clamp((p - 0.76) / 0.04))
 
   return (
-    <figure className="relative order-1 mx-auto lg:order-2">
-      <div className="relative aspect-[445/767] h-[min(42vh,520px)] overflow-hidden rounded-[1.5rem] border border-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.35)] lg:h-[min(78vh,767px)]">
+    <figure className="relative mx-auto w-full max-w-5xl">
+      <div className="relative mx-auto aspect-[734/412] max-h-[56vh] overflow-hidden rounded-[1.5rem] border border-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.35)]" style={{ maxWidth: 'calc(56vh * 734 / 412)' }}>
         <img
-          src="/story/city-street.png"
-          alt="An illustrated city street with tall towers, brick buildings and a tree lined avenue."
+          src="/story/skyline.jpg"
+          alt="A coloured pencil drawing of a city skyline under a blue sky."
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ transform: `scale(${zoom})`, transformOrigin: `50% ${100 - travel * 100}%` }}
+          style={{ transform: `scale(${zoom})`, transformOrigin: `${15 + travel * 70}% 70%` }}
           draggable="false"
         />
         {/* dusk: the lights go out */}
@@ -98,7 +98,7 @@ function Postcard({ p }) {
         <div className="absolute inset-0 mix-blend-screen" style={{ opacity: glow * 0.45, background: 'radial-gradient(60% 50% at 50% 70%, #F5B942, transparent 70%)' }} aria-hidden />
 
         {/* chapter 4: the city becomes readable */}
-        <div className="absolute inset-x-4 bottom-4 space-y-2" style={{ opacity: label, transform: `translateY(${(1 - label) * 16}px)` }} aria-hidden>
+        <div className="absolute bottom-4 left-4 w-72 max-w-[80%] space-y-2" style={{ opacity: label, transform: `translateY(${(1 - label) * 16}px)` }} aria-hidden>
           {[
             ['Habit Tracker', '3 floors built · 2 to go · paused: exams'],
             ['Recipe Remix', 'untouched 7 months · windows dark'],
