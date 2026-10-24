@@ -65,7 +65,7 @@
 
 ---
 
-## 01 · The problem: the project graveyard
+## 01 · The problem:- the project graveyard
 
 | Why projects stop | What is lost |
 |---|---|
