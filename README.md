@@ -48,6 +48,8 @@ HALFBUILT already speaks construction, so the new rules fit naturally. **The dat
 | Open or close for co-builders | **Project card** | **Builders' Square** / **Private** |
 | Accept or decline a join request | **Request card** | **Welcome aboard** / **Not now** |
 | Ask to join a project | **Your builder card** | **Join this build** |
+| Save your city to move devices | **City deed** | **Vault** (downloads it) / **Moving from another device?** on Log in |
+| Save a building as an image | **Postcard** | **Post box** (downloads a PNG) |
 | Log out | **Builder pass** | **Exit gate** |
 | Reset demo data | **Demolition order** | **Demolition zone** |
 
@@ -222,6 +224,10 @@ Every result comes with reasoning and a two hour first step. **The builder alway
 | **Activity grid** | GitHub and LeetCode style 26 week grid with streak and totals |
 | **Revival Leaderboard** | Ranks builders by projects revived, not started. All time and this month |
 | **Builders' Square** | Open a project to co-builders with the skills it needs; others request to join |
+| **City deed** | Your account and buildings as one small file. Drop it on the log in page of any other browser to move in |
+| **Building postcards** | Save any building as a 1080 x 1350 image with its score, ready to share |
+| **Daily nudge** | My City points at the project that most needs you: inspect a forgotten one, or add one floor today |
+| **Log in with email or username** | Either works, case does not matter |
 | **Multilingual hello** | Hello, Namaste, Hola, Bonjour, Konnichiwa, Hallo, once per session, skippable |
 | **Light and dark** | Site wide dark mode; the city switches to night with glowing windows |
 
