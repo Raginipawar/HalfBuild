@@ -257,7 +257,7 @@ flowchart TB
 
 ## 08 · Design language
 
-- **Type:** **Instrument Serif** for headings with big size contrast, **Inter** for body text.
+- **Type:** the apple.com type system: SF Pro Display and SF Pro Text through the system font stack, with Inter as the closest match on Windows and Android.
 - **Colour (from our slides):** paper `#F7F7F3` with a faint grid, ink `#1F1E1F`, grey `#CDCEC8`, beige `#DED3B9`, muted `#8C8C88`, and warm window light `#F5B942` as the single accent.
 - **Slide motifs:** pixel squares in corners, grey half circles, thin grid lines, rounded black panels, pill headings.
 - **City awake, city sleeping:** a day and night toggle on the city shows at a glance which projects are still lit.
@@ -274,6 +274,16 @@ Live build: **24 October 2026, 12:00 to 23:59 IST.**
 
 | Time | Phase | Status |
 |---|---|:-:|
+| 12:00 | 1 · Setup: tokens, navbar, menu, Hello intro, seed data, isometric hero city | ✅ |
+| 13:00 | 2 · Data driven city: layout, Find a builder search, drag to explore, day and night | ✅ |
+| 15:00 | 3 · Home page: problem, how it works, features, live score demo, demo city, community, FAQ | ✅ |
+| 16:00 | 4 · About and How it works pages with diagrams | ✅ |
+| 17:00 | 5 · Auth, My City, Add project, Project detail, Site Inspection | ✅ |
+| 18:00 | 6 · Leaderboard, Builders' Square, public profiles, **Surprise Challenge** | ⏳ |
+| 21:00 | 7 · Polish and deploy | |
+| 23:00 | 8 · Ship | |
+
+---|---|:-:|
 | 12:00 | 1 · Setup: Vite, Tailwind, Router, Zustand, tokens, Navbar, menu, Hello intro, seed data, isometric hero city | ✅ |
 | 13:00 | 2 · Buildings and My City, city and list views | ⏳ |
 | 15:00 | 3 · Add project with live preview, project page, timeline | |
