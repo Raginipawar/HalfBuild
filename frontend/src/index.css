@@ -1,0 +1,324 @@
+@import "tailwindcss";
+
+/*
+  Design tokens. Type system and neutrals follow rerun.io:
+  system sans at weight 450 with tight tracking, JetBrains Mono for
+  labels and buttons, hairline borders, small radii.
+  Colour comes from a soft baby pastel gradient and the city itself.
+*/
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-panel: var(--panel);
+  --color-peach: var(--peach);
+  --color-pink: var(--pink);
+  --color-lilac: var(--lilac);
+  --color-sky: var(--sky);
+  --color-mint: var(--mint);
+  --color-butter: var(--butter);
+  --color-light: var(--light);
+}
+
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #0a0a0a;
+  --muted: #525252;
+  --subtle: #404040;
+  --line: #e5e5e5;
+  --line-strong: #d4d4d4;
+  --panel: #fafafa;
+
+  /* baby pastels */
+  --peach: #ffe4d6;
+  --pink: #fde2ef;
+  --lilac: #e9e3ff;
+  --sky: #dcebff;
+  --mint: #ddf5ea;
+  --butter: #fff4cc;
+
+  /* city */
+  --light: #ffc56e;            /* lit window, main accent */
+  --window-off: #c9cde3;
+  --face-t: #ffffff;
+  --face-l: #eef0fa;
+  --face-r: #dde1f3;
+  --stone-t: #fbf7f1;
+  --stone-l: #f1ebe2;
+  --stone-r: #e4dccf;
+  --edge: rgba(70, 70, 110, 0.22);
+  --scaffold: #8f8fb0;
+  --crane: #f2a07f;
+  --flag: #f59ec0;
+  --plaque: #e7d7b8;
+  --slab-top-a: #f3f0ff;
+  --slab-top-b: #eaf7f1;
+  --slab-l: #e0dcf5;
+  --slab-r: #cfd9f0;
+  --road: #e6e4f2;
+  --curb: #ffffff;
+  --lane: #ffffff;
+  --grass: #d4f0e2;
+  --tree: #b9e6cf;
+  --tree-hi: #d6f3e4;
+  --trunk: #b7a59a;
+  --lamp: #ffd28a;
+  --glow-alpha: 0.35;
+  --car-a: #f9b9d3;
+  --car-b: #a9cdf7;
+  --shade: rgba(90, 90, 140, 0.10);
+
+  --sky-a: #e4f0ff;
+  --sky-b: #f0e9ff;
+  --sky-c: #fde8f2;
+  --sky-d: #fff0e4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #000000;
+    --fg: #f5f5f5;
+    --muted: #a3a3a3;
+    --subtle: #d4d4d4;
+    --line: #262626;
+    --line-strong: #404040;
+    --panel: #0a0a0a;
+    --peach: #3a2a24;
+    --pink: #3a2232;
+    --lilac: #2a2545;
+    --sky: #1c2a44;
+    --mint: #1a3329;
+    --butter: #3a331c;
+    --light: #ffc56e;
+    --window-off: #22233a;
+    --face-t: #4a4d72;
+    --face-l: #34365a;
+    --face-r: #282a47;
+    --stone-t: #5a5560;
+    --stone-l: #48434e;
+    --stone-r: #3a3640;
+    --edge: rgba(0, 0, 0, 0.35);
+    --scaffold: #8a8cb8;
+    --crane: #f2a07f;
+    --flag: #f59ec0;
+    --plaque: #b8a37f;
+    --slab-top-a: #1b1c33;
+    --slab-top-b: #16262a;
+    --slab-l: #14152a;
+    --slab-r: #0f1022;
+    --road: #24253d;
+    --curb: #34365a;
+    --lane: #4b4d73;
+    --grass: #1d3a30;
+    --tree: #2f6b55;
+    --tree-hi: #3d8569;
+    --trunk: #5b4b44;
+    --lamp: #ffd28a;
+    --glow-alpha: 0.6;
+    --car-a: #f59ec0;
+    --car-b: #8fbaf0;
+    --shade: rgba(0, 0, 0, 0.35);
+    --sky-a: #0d1226;
+    --sky-b: #171230;
+    --sky-c: #22112a;
+    --sky-d: #24160f;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #000000;
+  --fg: #f5f5f5;
+  --muted: #a3a3a3;
+  --subtle: #d4d4d4;
+  --line: #262626;
+  --line-strong: #404040;
+  --panel: #0a0a0a;
+  --peach: #3a2a24;
+  --pink: #3a2232;
+  --lilac: #2a2545;
+  --sky: #1c2a44;
+  --mint: #1a3329;
+  --butter: #3a331c;
+  --light: #ffc56e;
+  --window-off: #22233a;
+  --face-t: #4a4d72;
+  --face-l: #34365a;
+  --face-r: #282a47;
+  --stone-t: #5a5560;
+  --stone-l: #48434e;
+  --stone-r: #3a3640;
+  --edge: rgba(0, 0, 0, 0.35);
+  --scaffold: #8a8cb8;
+  --crane: #f2a07f;
+  --flag: #f59ec0;
+  --plaque: #b8a37f;
+  --slab-top-a: #1b1c33;
+  --slab-top-b: #16262a;
+  --slab-l: #14152a;
+  --slab-r: #0f1022;
+  --road: #24253d;
+  --curb: #34365a;
+  --lane: #4b4d73;
+  --grass: #1d3a30;
+  --tree: #2f6b55;
+  --tree-hi: #3d8569;
+  --trunk: #5b4b44;
+  --lamp: #ffd28a;
+  --glow-alpha: 0.6;
+  --car-a: #f59ec0;
+  --car-b: #8fbaf0;
+  --shade: rgba(0, 0, 0, 0.35);
+  --sky-a: #0d1226;
+  --sky-b: #171230;
+  --sky-c: #22112a;
+  --sky-d: #24160f;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--lilac);
+  color: var(--fg);
+}
+
+@layer components {
+  .heading-1 {
+    font-size: clamp(2.5rem, 6vw + 1rem, 4.25rem);
+    font-weight: 450;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .heading-2 {
+    font-size: clamp(2rem, 4vw + 1rem, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .heading-6 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.0125em;
+    line-height: 1.33;
+  }
+  .text-large {
+    font-size: 19px;
+    font-weight: 400;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .btn {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 0.875rem;
+    font-size: 0.875rem;
+    border-radius: 2px;
+    white-space: nowrap;
+    transition: opacity 150ms, background-color 150ms, border-color 150ms;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--fg);
+    color: var(--bg);
+  }
+  .btn-primary:hover {
+    opacity: 0.85;
+  }
+  .btn-ghost {
+    border: 1px solid var(--line-strong);
+    color: var(--fg);
+  }
+  .btn-ghost:hover {
+    background: color-mix(in srgb, var(--fg) 6%, transparent);
+  }
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    transition: border-color 150ms, color 150ms;
+    cursor: pointer;
+  }
+  .icon-btn:hover {
+    border-color: var(--line-strong);
+    color: var(--fg);
+  }
+
+  /* soft pastel wash behind hero sections */
+  .pastel-wash {
+    background:
+      radial-gradient(40% 55% at 15% 20%, var(--peach) 0%, transparent 70%),
+      radial-gradient(35% 50% at 40% 0%, var(--pink) 0%, transparent 70%),
+      radial-gradient(40% 55% at 70% 10%, var(--lilac) 0%, transparent 70%),
+      radial-gradient(40% 60% at 95% 35%, var(--sky) 0%, transparent 70%),
+      radial-gradient(35% 45% at 55% 60%, var(--mint) 0%, transparent 75%);
+    filter: blur(20px);
+    opacity: 0.9;
+  }
+
+  /* dawn sky behind the city */
+  .city-sky {
+    background: linear-gradient(180deg, var(--sky-a) 0%, var(--sky-b) 40%, var(--sky-c) 75%, var(--sky-d) 100%);
+  }
+}
+
+.lamp-glow {
+  animation: lamp-breathe 5s ease-in-out infinite;
+}
+@keyframes lamp-breathe {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
