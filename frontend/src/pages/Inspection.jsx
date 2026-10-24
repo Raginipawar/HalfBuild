@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useStore, useCurrentUser } from '../store/useStore'
 import BuildingView from '../iso/BuildingView'
 import PathChooser from '../components/PathChooser'
 import { ScoreRing } from '../components/ui'
+import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
 import { CONFIG, defaultAnswers, inspect } from '../logic/revivalScore'
 import NotFound from './NotFound'
 
@@ -20,29 +21,20 @@ export default function Inspection() {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState(() => (project ? defaultAnswers(project) : {}))
   const [result, setResult] = useState(null)
-  const [choosing, setChoosing] = useState(false)
 
   const questions = CONFIG.questions
   const q = questions[step]
   const last = step === questions.length - 1
 
-  const next = () => {
+  // Canvas Protocol: dropping an answer card into the slot files it and moves on
+  const file = (value) => {
+    const a = { ...answers, [q.id]: value }
+    setAnswers(a)
     if (!last) return setStep(step + 1)
-    const r = inspect(answers, project)
+    const r = inspect(a, project)
     runInspection(project.id, r)
     setResult(r)
   }
-
-  // keyboard: Enter for next, Escape to go back
-  useEffect(() => {
-    if (result) return
-    const onKey = (e) => {
-      if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') next()
-      if (e.key === 'Escape' && step > 0) setStep(step - 1)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  })
 
   if (!project) return <NotFound />
   if (me?.id !== project.ownerId) return <Navigate to={`/project/${project.id}`} replace />
@@ -87,16 +79,17 @@ export default function Inspection() {
               >
                 <h1 className="title mt-2">{q.label}</h1>
                 <p className="lead mt-3">{q.help}</p>
-                <div className="mt-8">
+                <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_200px]">
                   <Answer q={q} value={answers[q.id]} onChange={(v) => setAnswers({ ...answers, [q.id]: v })} />
+                  <DropZone accepts={['answer']} onDrop={file} title={last ? 'Inspection slot · see my score' : 'Inspection slot'} hint="Drop your answer here" className="min-h-[120px] lg:sticky lg:top-28 lg:self-start" />
                 </div>
-                <div className="mt-10 flex gap-3">
-                  <button className="btn btn-ghost" disabled={step === 0} style={{ opacity: step === 0 ? 0.35 : 1 }} onClick={() => setStep(step - 1)}>
-                    <ArrowLeft size={16} /> Back
-                  </button>
-                  <button className="btn btn-primary" onClick={next}>
-                    {last ? 'See my Revival Score' : 'Next'} <ArrowRight size={16} />
-                  </button>
+                <div className="mt-6 flex flex-wrap items-center gap-4">
+                  {step > 0 && (
+                    <button className="inline-flex items-center gap-1 text-sm text-muted hover:text-ink" onClick={() => setStep(step - 1)}>
+                      <ArrowLeft size={14} /> Previous question
+                    </button>
+                  )}
+                  <CanvasHint>Drag an answer card into the slot to file it.</CanvasHint>
                 </div>
               </motion.div>
             ) : (
@@ -123,22 +116,12 @@ export default function Inspection() {
                     ))}
                   </ul>
                 </details>
-                {!choosing ? (
-                  <div className="mt-8 flex flex-wrap gap-3">
-                    <button className="btn btn-primary" onClick={() => setChoosing('accept')}>Accept plan</button>
-                    <button className="btn btn-ghost" onClick={() => setChoosing('other')}>Choose another path</button>
-                    <button className="btn text-muted hover:text-ink" onClick={() => navigate(`/project/${project.id}`)}>Decide later</button>
-                  </div>
-                ) : (
-                  <div className="mt-8">
-                    <PathChooser
-                      project={project}
-                      recommended={result.path}
-                      startOpen={choosing === 'accept' ? result.path : null}
-                      onApplied={() => navigate(`/project/${project.id}`)}
-                    />
-                  </div>
-                )}
+                <div className="mt-8">
+                  <h2 className="subtitle">Pick your path</h2>
+                  <p className="mb-4 mt-1 text-sm text-muted">Drag the recommended path, or any other, onto your building to start it.</p>
+                  <PathChooser project={project} recommended={result.path} onApplied={() => navigate(`/project/${project.id}`)} />
+                  <Link to={`/project/${project.id}`} className="mt-4 inline-block text-sm text-muted underline underline-offset-4 hover:text-ink">Decide later</Link>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -160,31 +143,29 @@ function Answer({ q, value, onChange }) {
           aria-label={q.label}
           className="mt-4 w-full accent-[var(--color-ink)]"
         />
+        <div className="mt-5 max-w-xs">
+          <DragCard type="answer" data={value} label={`Answer ${value} percent`}>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Your answer</p>
+            <p className="font-display text-2xl font-semibold">{value}% done</p>
+          </DragCard>
+        </div>
       </div>
     )
   }
   return (
-    <div className={`grid gap-2.5 ${q.type === 'scale' ? 'grid-cols-5' : 'sm:grid-cols-2'}`} role="radiogroup" aria-label={q.label}>
-      {q.options.map((o) => {
-        const on = value === o.value
-        return (
-          <button
-            key={o.value}
-            type="button"
-            role="radio"
-            aria-checked={on}
-            onClick={() => onChange(o.value)}
-            className={`rounded-2xl border px-4 py-4 text-left text-sm font-medium transition-all ${on ? 'border-ink bg-ink text-paper' : 'border-grey bg-card hover:border-ink'} ${q.type === 'scale' ? 'text-center' : ''}`}
-          >
-            {q.type === 'scale' ? (
-              <>
-                <span className="block font-display text-3xl font-semibold">{o.value}</span>
-                <span className={`mt-1 hidden text-[11px] sm:block ${on ? 'text-white/70' : 'text-muted'}`}>{o.label}</span>
-              </>
-            ) : o.label}
-          </button>
-        )
-      })}
+    <div className={`grid gap-2.5 ${q.type === 'scale' ? 'grid-cols-5' : 'sm:grid-cols-2'}`} aria-label={q.label}>
+      {q.options.map((o) => (
+        <DragCard key={o.value} type="answer" data={o.value} label={o.label} className={value === o.value ? '!border-light' : ''}>
+          {q.type === 'scale' ? (
+            <div className="text-center">
+              <span className="block font-display text-3xl font-semibold">{o.value}</span>
+              <span className="mt-1 hidden text-[11px] text-muted sm:block">{o.label}</span>
+            </div>
+          ) : (
+            <span className="text-sm font-medium">{o.label}</span>
+          )}
+        </DragCard>
+      ))}
     </div>
   )
 }

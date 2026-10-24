@@ -5,7 +5,8 @@ import { Search } from 'lucide-react'
 import { useStore, useCurrentUser } from '../store/useStore'
 import { rankBuilders, POINTS } from '../logic/leaderboard'
 import ProjectCard from '../components/ProjectCard'
-import { Avatar, Chip } from '../components/ui'
+import { Avatar } from '../components/ui'
+import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
 import { PixelSquares } from '../components/Decor'
 
 // Revival Leaderboard and Builders' Square, the two community pages.
@@ -101,8 +102,7 @@ export function BuildersSquare() {
   const requestJoin = useStore((s) => s.requestJoin)
   const [query, setQuery] = useState('')
   const [skill, setSkill] = useState('all')
-  const [asking, setAsking] = useState(null)
-  const [message, setMessage] = useState('')
+  const [note, setNote] = useState('')
 
   const open = projects.filter((p) => p.openForCollab)
   const skills = [...new Set(open.flatMap((p) => p.skillsNeeded))].sort()
@@ -111,12 +111,13 @@ export function BuildersSquare() {
     `${p.name} ${p.description}`.toLowerCase().includes(query.toLowerCase()),
   )
 
+  // Canvas Protocol: each card's footer is a drop zone for your builder card
   const action = (p) => {
     if (p.ownerId === me?.id) return <p className="text-sm text-muted">This is your project.</p>
     const req = p.joinRequests.find((r) => r.userId === me?.id)
     if (req) return <p className="text-sm">Request <b>{req.status}</b></p>
     if (!me) return <Link to="/login" state={{ from: '/square' }} className="btn btn-ghost btn-sm w-full">Log in to join</Link>
-    return <button className="btn btn-primary btn-sm w-full" onClick={() => { setAsking(p); setMessage('') }}>Request to join</button>
+    return <DropZone accepts={['builder']} onDrop={() => requestJoin(p.id, note.trim() || 'I would love to help build this.')} title="Join this build" hint="Drop your builder card here" />
   }
 
   return (
@@ -125,6 +126,24 @@ export function BuildersSquare() {
       <p className="eyebrow mt-6">Builders' Square</p>
       <h1 className="title mt-2">Some projects just need one more builder.</h1>
       <p className="lead mt-3 max-w-2xl">These paused projects are open for co-builders. Find one that needs your skills.</p>
+
+      {me && (
+        <div className="sticky top-20 z-30 mt-8 grid gap-3 rounded-2xl glass-bar p-3 sm:grid-cols-[minmax(0,320px)_1fr] sm:items-center">
+          <DragCard type="builder" data={me.id} label="Your builder card">
+            <div className="flex items-center gap-3">
+              <Avatar name={me.name} size={34} />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold">{me.name}</p>
+                <p className="truncate text-xs text-muted">{me.skills.join(', ') || 'Builder'} · drag me onto a project</p>
+              </div>
+            </div>
+          </DragCard>
+          <div className="space-y-1.5">
+            <input aria-label="Note to the owner" className="field" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Optional note: what would you like to help with?" />
+            <CanvasHint>Drag your builder card onto a project's dashed zone to ask to join.</CanvasHint>
+          </div>
+        </div>
+      )}
 
       <div className="mt-8 flex flex-wrap gap-3">
         <label className="field flex flex-1 items-center gap-2 px-3">
@@ -145,21 +164,6 @@ export function BuildersSquare() {
         {shown.map((p) => <ProjectCard key={p.id} project={p} showOwner action={action(p)} />)}
       </div>
       {!shown.length && <p className="mt-10 text-center text-muted">Nothing matches yet. Try another skill.</p>}
-
-      {asking && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 p-4" role="dialog" aria-modal="true" aria-label={`Request to join ${asking.name}`} onClick={() => setAsking(null)}>
-          <div className="card w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
-            <h2 className="subtitle">Join {asking.name}</h2>
-            <p className="mt-1 text-sm text-muted">Tell the owner what you would like to help with.</p>
-            <div className="mt-3 flex flex-wrap gap-1.5">{asking.skillsNeeded.map((s) => <Chip key={s} tone="beige">{s}</Chip>)}</div>
-            <textarea autoFocus rows={3} className="field mt-4 resize-none" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="I can help with..." aria-label="Message" />
-            <div className="mt-4 flex justify-end gap-2">
-              <button className="btn btn-ghost btn-sm" onClick={() => setAsking(null)}>Cancel</button>
-              <button className="btn btn-primary btn-sm" disabled={!message.trim()} onClick={() => { requestJoin(asking.id, message.trim()); setAsking(null) }}>Send request</button>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   )
 }

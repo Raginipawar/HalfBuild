@@ -2,6 +2,8 @@ import { lazy, Suspense, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { ChipsInput, Field } from '../components/ui'
+import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
+import Logo from '../components/Logo'
 import { PixelSquares } from '../components/Decor'
 // the 3D lanyard pulls in three.js, so it only loads on these two pages
 const Lanyard = lazy(() => import('../components/Lanyard/Lanyard'))
@@ -9,6 +11,28 @@ const Lanyard = lazy(() => import('../components/Lanyard/Lanyard'))
 // Sign up and Log in share one layout: form on the left, a building on the right.
 // DEMO AUTHENTICATION ONLY: everything stays in this browser.
 
+
+// Canvas Protocol: you enter by dropping your builder pass on the site gate.
+function PassAndGate({ name, line, onEnter, busy, gateTitle }) {
+  return (
+    <div className="mt-2 space-y-3">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <DragCard type="pass" data="pass" label="Your builder pass" disabled={busy}>
+          <div className="flex items-center gap-3">
+            <Logo size={28} />
+            <div className="min-w-0">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Builder pass</p>
+              <p className="truncate font-semibold">{name || 'Your name here'}</p>
+              <p className="truncate text-xs text-muted">{line}</p>
+            </div>
+          </div>
+        </DragCard>
+        <DropZone accepts={['pass']} onDrop={onEnter} title={busy ? 'Opening the gate' : gateTitle} hint="Drop your pass here" />
+      </div>
+      <CanvasHint />
+    </div>
+  )
+}
 
 function AuthShell({ title, sub, children }) {
   return (
@@ -49,7 +73,7 @@ export function Login() {
   const [busy, setBusy] = useState(false)
 
   const submit = async (e) => {
-    e.preventDefault()
+    e?.preventDefault()
     setBusy(true)
     const res = await login(form)
     setBusy(false)
@@ -59,14 +83,14 @@ export function Login() {
 
   return (
     <AuthShell title="Welcome back." sub="Your city kept the lights on where it could.">
-      <form onSubmit={submit} className="space-y-4" noValidate>
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-4" noValidate>
         <Field label="Email" htmlFor="email">
           <input id="email" type="email" autoComplete="email" required className="field" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
         </Field>
         <Field label="Password" htmlFor="password" error={error}>
           <input id="password" type="password" autoComplete="current-password" required className="field" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
         </Field>
-        <button type="submit" className="btn btn-primary w-full" disabled={busy}>{busy ? 'Opening your city' : 'Log in'}</button>
+        <PassAndGate name={form.email} line="Drag me to the gate to log in" onEnter={submit} busy={busy} gateTitle="Site gate · Log in" />
         <button
           type="button"
           className="btn btn-ghost w-full"
@@ -91,7 +115,7 @@ export function Signup() {
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
   const submit = async (e) => {
-    e.preventDefault()
+    e?.preventDefault()
     const next = {}
     if (!form.name.trim()) next.name = 'Tell us what to call you.'
     if (!/^[a-z0-9_]{3,20}$/i.test(form.username.trim())) next.username = 'Use 3 to 20 letters, numbers or underscores.'
@@ -108,7 +132,7 @@ export function Signup() {
 
   return (
     <AuthShell title="Claim your plot." sub="Every project you started deserves a place in your city.">
-      <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2" noValidate>
+      <form onSubmit={(e) => e.preventDefault()} className="grid gap-4 sm:grid-cols-2" noValidate>
         <Field label="Name" htmlFor="name" error={errors.name}>
           <input id="name" autoComplete="name" className="field" value={form.name} onChange={set('name')} />
         </Field>
@@ -130,7 +154,9 @@ export function Signup() {
             <ChipsInput id="skills" value={form.skills} onChange={(skills) => setForm({ ...form, skills })} placeholder="React, UI design, Python" />
           </Field>
         </div>
-        <button type="submit" className="btn btn-primary sm:col-span-2" disabled={busy}>{busy ? 'Laying the foundation' : 'Build my city'}</button>
+        <div className="sm:col-span-2">
+          <PassAndGate name={form.name} line={form.username ? `@${form.username}` : 'Drag me to the gate to join'} onEnter={submit} busy={busy} gateTitle="Site gate · Build my city" />
+        </div>
         <p className="text-center text-sm text-muted sm:col-span-2">
           Already have a city? <Link to="/login" className="font-medium text-ink underline underline-offset-4">Log in</Link>
         </p>

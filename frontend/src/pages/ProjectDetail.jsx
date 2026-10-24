@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { Check, ExternalLink, Github } from 'lucide-react'
+import { Check, ExternalLink, Flag, Github } from 'lucide-react'
 import { useStore, useCurrentUser } from '../store/useStore'
 import BuildingView from '../iso/BuildingView'
 import PathChooser from '../components/PathChooser'
+import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
 import { Avatar, Chip, ChipsInput, ScoreRing, StatusBadge } from '../components/ui'
 import { REASONS } from '../logic/buildingState'
 import { CONFIG, completionOf } from '../logic/revivalScore'
@@ -41,11 +42,9 @@ export default function ProjectDetail() {
       </Link>
 
       <div className="mt-6 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-        {/* Building */}
-        <div
-          className="flex flex-col items-center justify-end rounded-[1.75rem] border border-ink p-8 lg:sticky lg:top-24 lg:self-start"
-          style={{ background: 'linear-gradient(180deg, var(--sky-top), var(--sky-bottom))' }}
-        >
+        {/* Building: while reviving it is the drop zone for parts and the flag */}
+        <div className="lg:sticky lg:top-24 lg:self-start">
+        <BuildingPanel project={project} isOwner={isOwner}>
           <BuildingView project={project} className="h-[440px] w-full" minFloors={8} />
           {project.status === 'landmark' && project.lessons && (
             <div className="mt-6 w-full rounded-xl border border-ink bg-[var(--stone-t)] p-5">
@@ -53,6 +52,7 @@ export default function ProjectDetail() {
               <p className="mt-2 text-sm leading-relaxed">{project.lessons}</p>
             </div>
           )}
+        </BuildingPanel>
         </div>
 
         {/* Story and actions */}
@@ -126,10 +126,31 @@ export default function ProjectDetail() {
   )
 }
 
-function Actions({ project }) {
+function BuildingPanel({ project, isOwner, children }) {
   const completePart = useStore((s) => s.completePart)
   const markRebuilt = useStore((s) => s.markRebuilt)
-  const [choosing, setChoosing] = useState(false)
+  const frame = 'flex flex-col items-center justify-end !rounded-[1.75rem] p-8'
+  if (isOwner && project.status === 'reviving') {
+    return (
+      <DropZone
+        accepts={['part', 'flag']}
+        onDrop={(data, type) => (type === 'flag' ? markRebuilt(project.id) : completePart(project.id, data))}
+        title="Your building"
+        className={frame}
+      >
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Drop parts here to build them</p>
+        {children}
+      </DropZone>
+    )
+  }
+  return (
+    <div className={`${frame} rounded-[1.75rem] border border-ink`} style={{ background: 'linear-gradient(180deg, var(--sky-top), var(--sky-bottom))' }}>
+      {children}
+    </div>
+  )
+}
+
+function Actions({ project }) {
   const ins = project.inspection
 
   return (
@@ -155,30 +176,38 @@ function Actions({ project }) {
               <p className="mt-2 text-sm"><b>First step:</b> {ins.firstStep}</p>
             </div>
           </div>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <button className="btn bg-paper text-ink hover:bg-light" onClick={() => setChoosing(true)}>Use this plan</button>
-            <button className="btn border border-white/40 hover:border-paper" onClick={() => setChoosing(true)}>Choose another path</button>
-            <Link to={`/project/${project.id}/inspect`} className="btn text-white/60 hover:text-paper">Inspect again</Link>
-          </div>
-          {choosing && <div className="mt-6 rounded-2xl bg-paper p-4 text-ink"><PathChooser project={project} recommended={ins.path} startOpen={ins.path} onApplied={() => setChoosing(false)} /></div>}
+          <Link to={`/project/${project.id}/inspect`} className="mt-4 inline-block text-sm text-white/60 underline underline-offset-4 hover:text-paper">Inspect again</Link>
+        </div>
+      )}
+      {project.status === 'inspected' && ins && (
+        <div className="mt-5">
+          <PathChooser project={project} recommended={ins.path} />
         </div>
       )}
 
       {project.status === 'reviving' && (
         <div className="card p-6">
           <p className="font-display text-2xl font-semibold tracking-tight">Under revival</p>
-          <p className="text-sm text-muted">Mark a part as done and watch its scaffolding become a lit floor.</p>
-          <ul className="mt-4 space-y-2">
+          <p className="text-sm text-muted">Finished a part? Drag it onto your building and watch the scaffolding become a lit floor.</p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
             {project.pendingParts.map((part) => (
-              <motion.li key={part} layout className="flex items-center justify-between gap-3 rounded-xl border border-dashed border-soft px-4 py-3">
-                <span>{part}</span>
-                <button className="btn btn-primary btn-sm" onClick={() => completePart(project.id, part)}><Check size={14} /> Mark as done</button>
+              <motion.li key={part} layout>
+                <DragCard type="part" data={part} label={`Part ${part}`}>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Scaffolding</p>
+                  <p className="font-medium">{part}</p>
+                </DragCard>
               </motion.li>
             ))}
           </ul>
           {project.pendingParts.length === 0 && (
-            <button className="btn btn-primary mt-2" onClick={() => markRebuilt(project.id)}>Mark as rebuilt</button>
+            <div className="mt-2 max-w-xs">
+              <DragCard type="flag" data="flag" label="Rebuilt flag">
+                <p className="flex items-center gap-2 font-semibold"><Flag size={16} className="text-light" /> Rebuilt flag</p>
+                <p className="text-xs text-muted">Every part is done. Plant this on the roof.</p>
+              </DragCard>
+            </div>
           )}
+          <div className="mt-3"><CanvasHint /></div>
         </div>
       )}
 
@@ -197,7 +226,6 @@ function Collaboration({ project, isOwner, users, me }) {
   const updateProject = useStore((s) => s.updateProject)
   const respondJoin = useStore((s) => s.respondJoin)
   const requestJoin = useStore((s) => s.requestJoin)
-  const [skills, setSkills] = useState(project.skillsNeeded)
   const [message, setMessage] = useState('')
   const nameOf = (id) => users.find((u) => u.id === id)?.name ?? 'A builder'
   const mine = project.joinRequests.find((r) => r.userId === me?.id)
@@ -207,32 +235,31 @@ function Collaboration({ project, isOwner, users, me }) {
 
   return (
     <section className="mt-10 card p-6" aria-label="Co-builders">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="font-display text-xl font-semibold tracking-tight">Co-builders</p>
-          <p className="text-sm text-muted">{project.openForCollab ? 'Listed in Builders\' Square.' : 'Not looking for help right now.'}</p>
-        </div>
-        {isOwner && (
-          <button
-            role="switch"
-            aria-checked={project.openForCollab}
-            onClick={() => toggleCollab(project.id, skills)}
-            className={`relative h-7 w-12 rounded-full transition-colors ${project.openForCollab ? 'bg-ink' : 'bg-grey'}`}
-          >
-            <span className="sr-only">Open for co-builders</span>
-            <span className={`absolute top-1 h-5 w-5 rounded-full bg-paper transition-all ${project.openForCollab ? 'left-6' : 'left-1'}`} />
-          </button>
-        )}
-      </div>
+      <p className="font-display text-xl font-semibold tracking-tight">Co-builders</p>
+      <p className="text-sm text-muted">{project.openForCollab ? "Listed in Builders' Square." : 'Not looking for help right now.'}</p>
 
       {isOwner && (
-        <div className="mt-4">
-          <label htmlFor="skillsNeeded" className="mb-1.5 block text-sm font-medium">Skills needed</label>
-          <ChipsInput id="skillsNeeded" value={skills} onChange={setSkills} placeholder="Node, UI design" />
-          {project.openForCollab && skills.join() !== project.skillsNeeded.join() && (
-            <button className="btn btn-ghost btn-sm mt-2" onClick={() => updateProject(project.id, { skillsNeeded: skills })}>Save skills</button>
-          )}
-        </div>
+        <>
+          <div className="mt-4">
+            <label htmlFor="skillsNeeded" className="mb-1.5 block text-sm font-medium">Skills needed</label>
+            {/* skills save as you type, no save button */}
+            <ChipsInput id="skillsNeeded" value={project.skillsNeeded} onChange={(skillsNeeded) => updateProject(project.id, { skillsNeeded })} placeholder="Node, UI design" />
+          </div>
+          {/* Canvas Protocol: move the project card into or out of Builders' Square */}
+          <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr]">
+            <DragCard type="listing" data={project.id} label={`${project.name} listing`}>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Project card</p>
+              <p className="font-semibold">{project.name}</p>
+              <p className="text-xs text-muted">{project.openForCollab ? "Drag to Private to close the listing" : "Drag to Builders' Square to find help"}</p>
+            </DragCard>
+            <DropZone
+              accepts={['listing']}
+              onDrop={() => toggleCollab(project.id)}
+              title={project.openForCollab ? 'Private' : "Builders' Square"}
+              hint={project.openForCollab ? 'Drop to stop looking for co-builders' : 'Drop to open this project to co-builders'}
+            />
+          </div>
+        </>
       )}
 
       {project.coBuilders.length > 0 && (
@@ -246,19 +273,30 @@ function Collaboration({ project, isOwner, users, me }) {
       )}
 
       {isOwner && pending.length > 0 && (
-        <ul className="mt-5 space-y-3">
-          {pending.map((r) => (
-            <li key={r.userId} className="flex flex-wrap items-center gap-3 rounded-xl bg-paper p-4">
-              <Avatar name={nameOf(r.userId)} size={36} />
-              <div className="flex-1">
-                <p className="text-sm font-semibold">{nameOf(r.userId)} wants to help</p>
-                <p className="text-sm text-muted">{r.message}</p>
-              </div>
-              <button className="btn btn-primary btn-sm" onClick={() => respondJoin(project.id, r.userId, true)}>Accept</button>
-              <button className="btn btn-ghost btn-sm" onClick={() => respondJoin(project.id, r.userId, false)}>Decline</button>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-6">
+          <p className="mb-2 text-sm font-semibold">Join requests</p>
+          <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr]">
+            <ul className="space-y-2">
+              {pending.map((r) => (
+                <li key={r.userId}>
+                  <DragCard type="request" data={r.userId} label={`Request from ${nameOf(r.userId)}`}>
+                    <div className="flex items-center gap-3">
+                      <Avatar name={nameOf(r.userId)} size={32} />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold">{nameOf(r.userId)} wants to help</p>
+                        <p className="text-sm text-muted">{r.message}</p>
+                      </div>
+                    </div>
+                  </DragCard>
+                </li>
+              ))}
+            </ul>
+            <div className="grid gap-2">
+              <DropZone accepts={['request']} onDrop={(userId) => respondJoin(project.id, userId, true)} title="Welcome aboard" hint="Drop to accept as co-builder" />
+              <DropZone accepts={['request']} onDrop={(userId) => respondJoin(project.id, userId, false)} title="Not now" hint="Drop to decline kindly" />
+            </div>
+          </div>
+        </div>
       )}
 
       {!isOwner && project.openForCollab && (
@@ -266,15 +304,27 @@ function Collaboration({ project, isOwner, users, me }) {
           mine ? (
             <p className="mt-4 text-sm">Your request is <b>{mine.status}</b>.</p>
           ) : (
-            <div className="mt-4 flex flex-wrap gap-2">
-              <input aria-label="Message to the owner" className="field flex-1" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="What would you like to help with?" />
-              <button className="btn btn-primary" disabled={!message.trim()} onClick={() => requestJoin(project.id, message.trim())}>Request to join</button>
+            <div className="mt-4 space-y-3">
+              <input aria-label="Message to the owner" className="field" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="What would you like to help with?" />
+              <div className="grid gap-3 sm:grid-cols-2">
+                <DragCard type="builder" data={me.id} label="Your builder card">
+                  <div className="flex items-center gap-3">
+                    <Avatar name={me.name} size={32} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold">{me.name}</p>
+                      <p className="truncate text-xs text-muted">{me.skills.join(', ') || 'Builder'}</p>
+                    </div>
+                  </div>
+                </DragCard>
+                <DropZone accepts={['builder']} onDrop={() => requestJoin(project.id, message.trim() || 'I would love to help build this.')} title="Join this build" hint="Drop your card to send the request" />
+              </div>
             </div>
           )
         ) : (
           <Link to="/login" state={{ from: `/project/${project.id}` }} className="btn btn-ghost btn-sm mt-4">Log in to request to join</Link>
         )
       )}
+      {(isOwner || (me && project.openForCollab && !mine)) && <div className="mt-3"><CanvasHint /></div>}
     </section>
   )
 }

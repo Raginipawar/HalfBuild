@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { ChipsInput, Field } from '../components/ui'
+import { DragCard, DropZone, CanvasHint } from '../components/Canvas'
 import BuildingView from '../iso/BuildingView'
 import { REASONS, daysSince } from '../logic/buildingState'
 import { fetchRepos, repoToForm } from '../logic/github'
@@ -33,7 +34,7 @@ export default function AddProject() {
   }
 
   const submit = (e) => {
-    e.preventDefault()
+    e?.preventDefault()
     if (!form.name.trim()) { setError('Every building needs a name.'); return }
     const id = addProject({
       name: form.name.trim(),
@@ -67,7 +68,7 @@ export default function AddProject() {
           ))}
         </div>
         {mode === 'github' && <GithubImport onPick={(fields) => { setForm({ ...form, ...fields }); setMode('manual') }} />}
-        <form hidden={mode !== 'manual'} onSubmit={submit} className="grid gap-5 sm:grid-cols-2" noValidate>
+        <form hidden={mode !== 'manual'} onSubmit={(e) => e.preventDefault()} className="grid gap-5 sm:grid-cols-2" noValidate>
           <div className="sm:col-span-2">
             <Field label="Name" htmlFor="name" error={error}>
               <input id="name" className="field" value={form.name} onChange={(e) => { setError(''); set('name')(e) }} placeholder="Habit Tracker" />
@@ -117,21 +118,29 @@ export default function AddProject() {
           <Field label="Demo link" htmlFor="demo">
             <input id="demo" type="url" className="field" value={form.demo} onChange={set('demo')} placeholder="https://..." />
           </Field>
-          <button type="submit" className="btn btn-primary sm:col-span-2">Raise the building</button>
+          <div className="space-y-2 sm:col-span-2">
+            <DragCard type="blueprint" data="blueprint" label="Your blueprint">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Blueprint</p>
+              <p className="font-semibold">{form.name || 'Name your project first'}</p>
+              <p className="text-xs text-muted">{form.completedParts.length} floors · {form.pendingParts.length} under scaffolding · drag me onto the empty plot</p>
+            </DragCard>
+            <CanvasHint>Drag the blueprint onto the plot on the right to raise the building.</CanvasHint>
+          </div>
         </form>
         </div>
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div
-            className="flex flex-col items-center rounded-[1.75rem] border border-ink p-8"
-            style={{ background: 'linear-gradient(180deg, var(--sky-top), var(--sky-bottom))' }}
-          >
+          <DropZone accepts={['blueprint']} onDrop={() => submit()} title="Empty plot" className="!rounded-[1.75rem]">
+          <div className="flex flex-col items-center p-8">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">Empty plot · drop the blueprint here</p>
             <BuildingView project={preview} className="h-[380px] w-full" minFloors={8} />
             <p className="mt-4 font-display text-xl font-semibold tracking-tight">{preview.name}</p>
             <p className="text-sm text-muted">
               {form.completedParts.length} solid {form.completedParts.length === 1 ? 'floor' : 'floors'} · {form.pendingParts.length} under scaffolding
             </p>
+            {error && <p className="mt-2 text-sm font-medium text-[#a1361f]" role="alert">{error}</p>}
           </div>
+          </DropZone>
         </aside>
       </div>
     </main>

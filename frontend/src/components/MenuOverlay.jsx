@@ -5,6 +5,8 @@ import { ArrowUpRight, RotateCcw, X } from 'lucide-react'
 import { useStore, useCurrentUser } from '../store/useStore'
 import { lenis } from '../lib/smoothScroll'
 import { PixelSquares } from './Decor'
+import { DragCard, DropZone } from './Canvas'
+import Logo from './Logo'
 
 export default function MenuOverlay({ open, onClose }) {
   const user = useCurrentUser()
@@ -99,7 +101,29 @@ export default function MenuOverlay({ open, onClose }) {
               </ul>
             </nav>
 
-            <motion.div {...item(links.length)} className="flex flex-wrap items-center gap-3 border-t border-white/15 py-6">
+            {/* Canvas Protocol: leaving and resetting are drops, not buttons */}
+            <motion.div {...item(links.length)} className="grid gap-3 border-t border-white/15 pt-6 sm:grid-cols-4">
+              {user && (
+                <>
+                  <DragCard type="pass" data="exit" label="Your builder pass">
+                    <div className="flex items-center gap-2 text-ink">
+                      <Logo size={22} />
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">Builder pass</p>
+                        <p className="truncate text-sm font-semibold">{user.name}</p>
+                      </div>
+                    </div>
+                  </DragCard>
+                  <DropZone tone="dark" accepts={['pass']} onDrop={() => { logout(); onClose(); navigate('/') }} title="Exit gate" hint="Drop your pass to log out" />
+                </>
+              )}
+              <DragCard type="demolish" data="reset" label="Demolition order">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">Demolition order</p>
+                <p className="text-sm font-semibold text-ink">Reset demo data</p>
+              </DragCard>
+              <DropZone tone="dark" accepts={['demolish']} onDrop={() => { resetDemo(); onClose(); navigate('/') }} title="Demolition zone" hint="Drop to reset all demo data" />
+            </motion.div>
+            <motion.div {...item(links.length + 1)} className="flex flex-wrap items-center gap-3 py-6">
               {user ? (
                 <>
                   <span className="mr-auto text-sm text-white/60">
@@ -108,13 +132,7 @@ export default function MenuOverlay({ open, onClose }) {
                   <Link to={`/builder/${user.username}`} onClick={onClose} className="btn btn-sm border border-white/40 hover:border-paper">
                     My profile
                   </Link>
-                  <button
-                    type="button"
-                    className="btn btn-sm border border-white/40 hover:border-paper"
-                    onClick={() => { logout(); onClose(); navigate('/') }}
-                  >
-                    Log out
-                  </button>
+
                 </>
               ) : (
                 <>
@@ -123,19 +141,6 @@ export default function MenuOverlay({ open, onClose }) {
                   <Link to="/signup" onClick={onClose} className="btn btn-sm bg-paper text-ink hover:bg-light">Sign up</Link>
                 </>
               )}
-              <button
-                type="button"
-                className="btn btn-sm text-white/60 hover:text-paper"
-                onClick={() => {
-                  if (window.confirm('Reset all demo data? Your own changes will be cleared.')) {
-                    resetDemo()
-                    onClose()
-                    navigate('/')
-                  }
-                }}
-              >
-                <RotateCcw size={14} /> Reset demo data
-              </button>
             </motion.div>
             <PixelSquares className="absolute bottom-6 right-6 hidden opacity-80 sm:block" />
           </div>
