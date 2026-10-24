@@ -45,8 +45,11 @@ export default function MeadowHero() {
         </motion.div>
       </div>
 
-      <motion.div {...rise(4)} className="relative z-10 mx-auto mt-auto w-full max-w-4xl px-4">
-        <FrameLoop reduce={reduce} />
+      <motion.div {...rise(4)} className="relative z-10 mx-auto mt-auto w-full max-w-4xl overflow-hidden px-4">
+        {/* the drawing sits left of centre in its frame, so nudge it to centre the meadow */}
+        <div style={{ transform: 'translateX(13%)', clipPath: 'inset(0 10% 0 0)' }}>
+          <FrameLoop reduce={reduce} />
+        </div>
       </motion.div>
 
       {!reduce && (
