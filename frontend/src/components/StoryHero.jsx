@@ -75,7 +75,7 @@ export default function StoryHero() {
               {chapter.final && (
                 <div className="mt-5 flex flex-wrap justify-center gap-3">
                   <Link to={user ? '/city' : '/signup'} className="btn btn-primary">Build my city <ArrowRight size={16} /></Link>
-                  <a href="#demo-city" className="btn btn-ghost">Explore the demo city</a>
+                  <a href="#demo-city" className="btn btn-ghost">Explore the demo city below</a>
                 </div>
               )}
             </motion.div>

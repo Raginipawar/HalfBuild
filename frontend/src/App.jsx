@@ -7,6 +7,7 @@ import { ProtectedRoute } from './components/ui'
 import Landing from './pages/Landing'
 import About from './pages/About'
 import HowItWorks from './pages/HowItWorks'
+import CityTour from './pages/CityTour'
 import { Login, Signup } from './pages/Auth'
 import MyCity, { Profile } from './pages/MyCity'
 import AddProject from './pages/AddProject'
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<About />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/city-tour" element={<CityTour />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/city" element={guard(<MyCity />)} />

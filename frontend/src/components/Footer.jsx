@@ -3,7 +3,7 @@ import Logo from './Logo'
 
 const COLUMNS = [
   { title: 'Product', links: [['Home', '/'], ['How it works', '/how-it-works'], ['My City', '/city'], ['Add a project', '/project/new']] },
-  { title: 'Community', links: [['Leaderboard', '/leaderboard'], ["Builders' Square", '/square'], ['Demo builder', '/builder/demo']] },
+  { title: 'Community', links: [['Leaderboard', '/leaderboard'], ["Builders' Square", '/square'], ['City tour', '/city-tour'], ['Demo builder', '/builder/demo']] },
   { title: 'About', links: [['Our story', '/about'], ['Log in', '/login'], ['Sign up', '/signup']] },
 ]
 
@@ -35,8 +35,7 @@ export default function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-2 px-4 py-5 text-xs text-white/45 sm:px-8">
-          <span>Built for Code Variant Build 01 · Problem Statement 05</span>
-          <span>Team ragini.pawar24</span>
+          <span>© {new Date().getFullYear()} Ragini Pawar. All rights reserved.</span>
         </div>
       </div>
     </footer>

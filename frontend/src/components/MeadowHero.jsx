@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'motion/react'
-import { ArrowDown, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useCurrentUser } from '../store/useStore'
 
 // Opening scene: a dawn sky and a looping meadow illustration of a builder at work
@@ -41,7 +41,7 @@ export default function MeadowHero() {
         </motion.p>
         <motion.div {...rise(3)} className="mt-8 flex flex-wrap justify-center gap-3">
           <Link to={user ? '/city' : '/signup'} className="btn btn-primary">Build my city <ArrowRight size={16} /></Link>
-          <a href="#story" className="btn btn-ghost">Read the city story</a>
+          <Link to="/city-tour" className="btn btn-ghost">Take the city tour</Link>
         </motion.div>
       </div>
 
@@ -52,11 +52,6 @@ export default function MeadowHero() {
         </div>
       </motion.div>
 
-      {!reduce && (
-        <motion.a href="#story" className="absolute bottom-8 right-6 z-20 text-muted" animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity }} aria-label="Scroll to the story">
-          <ArrowDown size={20} />
-        </motion.a>
-      )}
     </section>
   )
 }
