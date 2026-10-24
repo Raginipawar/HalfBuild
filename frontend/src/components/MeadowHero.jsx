@@ -48,7 +48,6 @@ export default function MeadowHero() {
       <motion.div {...rise(4)} className="relative z-10 mx-auto mt-auto w-full max-w-4xl px-4">
         <FrameLoop reduce={reduce} />
       </motion.div>
-      <p className="relative z-10 pb-3 text-center text-[10px] text-muted">Meadow illustration from The Boring Blog, used with permission.</p>
 
       {!reduce && (
         <motion.a href="#story" className="absolute bottom-8 right-6 z-20 text-muted" animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity }} aria-label="Scroll to the story">
